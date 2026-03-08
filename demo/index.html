@@ -157,7 +157,8 @@
 
   /* === RIGHT DETAIL PANEL === */
   .detail-panel { border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
-  .detail-panel.hidden { display: none; }
+  .detail-panel { overflow: hidden; }
+  .layout:not(.detail-open) .detail-panel { width: 0; min-width: 0; padding: 0; border: none; }
 
   .detail-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .detail-header .dh-emoji { font-size: 24px; }
@@ -272,7 +273,7 @@
   </div>
 
   <!-- RIGHT DETAIL PANEL -->
-  <div class="detail-panel hidden" id="detail-panel">
+  <div class="detail-panel" id="detail-panel">
     <div class="detail-header">
       <div class="dh-emoji" id="dp-emoji"></div>
       <div class="dh-info">
@@ -681,7 +682,6 @@ function togglePayload(header) {
 // === DETAIL PANEL ===
 function openDetail(did) {
   selectedAgent = did;
-  detailPanel.classList.remove('hidden');
   layout.classList.add('detail-open');
   renderAgents();
   renderGraph();
@@ -702,7 +702,6 @@ function openDetail(did) {
 
 function closeDetail() {
   selectedAgent = null;
-  detailPanel.classList.add('hidden');
   layout.classList.remove('detail-open');
   renderAgents();
   renderGraph();
