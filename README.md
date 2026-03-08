@@ -130,3 +130,6 @@ No central server. No certificate authority. Just math and cryptography.
 ---
 
 Built at **Challenge 1: Trustworthy Multi-Agent AI** hackathon.
+
+
+Guide to Trustchain Configuration: https://docs.google.com/document/d/1F7kudkssh8tjIfgSeF2juWTFz0ttH91nf-MrJcQtSbc/edit?usp=sharing
