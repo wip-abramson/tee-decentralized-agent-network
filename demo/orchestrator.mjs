@@ -240,8 +240,43 @@ if (capturedResponse) {
 
 root.think('🛡️ Replay attack foiled. Nonce was already consumed — one-time use enforced.');
 
-// --- Phase 9: Protocol statistics ---
-step('PHASE 9: Protocol statistics');
+// --- Phase 9: Tampered message detection ---
+step('PHASE 9: Message tampering detection');
+
+rogue.think('What if I intercept a signed message and change the payload?');
+
+// Create a legitimately signed message, then tamper with it
+const diProof = rogue.getSigningTools();
+const envelope = {
+  '@context': ['https://btcr2.dev/context/v1'],
+  type: 'SignedMessage',
+  from: rogue.did,
+  timestamp: new Date().toISOString(),
+  payload: { type: 'ReferralRequest', patient: 'Real Patient', priority: 'GREEN' }
+};
+const proofConfig = {
+  type: 'DataIntegrityProof',
+  cryptosuite: 'bip340-jcs-2025',
+  verificationMethod: rogue.did + '#initialKey',
+  proofPurpose: 'authentication',
+  created: new Date().toISOString()
+};
+const signed = diProof.addProof(envelope, proofConfig);
+
+// Now tamper: change priority from GREEN to RED
+const tampered = JSON.parse(JSON.stringify(signed));
+tampered.payload.priority = 'RED — Immediate';
+tampered.payload.patient = 'Fabricated Emergency';
+
+rogue.think('Signed a GREEN priority message, then changed it to RED. Sending tampered message...');
+rogue.send(referral.did, tampered);
+await net.run();
+await delay(100);
+
+referral.think('🛡️ Tampered message detected — signature does not match modified content. REJECTED.');
+
+// --- Phase 10: Protocol statistics ---
+step('PHASE 10: Protocol statistics');
 
 const totalMessages = net.logs.filter(e => e.type === 'send').length;
 const totalThoughts = net.logs.filter(e => e.type === 'thought').length;
