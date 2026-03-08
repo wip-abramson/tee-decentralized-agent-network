@@ -55,11 +55,33 @@ export class Agent {
   // === NETWORK ===
   send(toDid, message) {
     if (this.network) {
-      const entry = { time: Date.now(), agent: this.name, type: 'send', from: this.did, to: toDid, msgType: message.type };
+      const entry = { time: Date.now(), agent: this.name, type: 'send', from: this.did, to: toDid, msgType: message.type, payload: message };
       this.log.push(entry);
       this.network.onLog(entry);
       this.network.deliver(this.did, toDid, message);
     }
+  }
+
+  getState() {
+    return {
+      name: this.name, role: this.role, emoji: this.emoji, did: this.did,
+      contacts: Object.fromEntries([...this.contacts.entries()].map(([did, c]) => [did, {
+        authenticated: c.authenticated,
+        authenticatedAt: c.authenticatedAt,
+        credentials: (c.credentials || []).map(vc => ({
+          type: vc.type, issuer: vc.issuer, issuanceDate: vc.issuanceDate,
+          credentialSubject: vc.credentialSubject, proof: vc.proof
+        }))
+      }])),
+      credentials: this.credentials,
+      log: this.log,
+      stats: {
+        sent: this.log.filter(e => e.type === 'send').length,
+        thoughts: this.log.filter(e => e.type === 'thought').length,
+        credentialsHeld: this.credentials.length,
+        contactsCount: this.contacts.size
+      }
+    };
   }
 
   receive(fromDid, message) {

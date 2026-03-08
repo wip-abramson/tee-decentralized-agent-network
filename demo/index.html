@@ -6,46 +6,57 @@
 <title>Trustworthy Multi-Agent AI — Trust Protocol Demo</title>
 <style>
   :root {
-    --bg: #0a0e17; --surface: #111827; --surface2: #1e293b;
-    --border: #334155; --text: #e2e8f0; --dim: #64748b;
+    --bg: #0a0e17; --surface: #111827; --surface2: #1e293b; --surface3: #1a2332;
+    --border: #334155; --border-light: #475569;
+    --text: #e2e8f0; --dim: #64748b; --dim2: #94a3b8;
     --cyan: #22d3ee; --green: #4ade80; --yellow: #fbbf24;
     --red: #f87171; --purple: #a78bfa; --blue: #60a5fa;
-    --orange: #fb923c;
+    --orange: #fb923c; --pink: #f472b6;
+    /* JSON syntax colors */
+    --json-key: #22d3ee; --json-string: #4ade80; --json-number: #fbbf24;
+    --json-bool: #fb923c; --json-null: #64748b;
+    --json-proof-bg: rgba(167,139,250,0.08); --json-proof-border: rgba(167,139,250,0.3);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; min-height: 100vh; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 13px; min-height: 100vh; overflow: hidden; }
 
-  header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-  header h1 { font-size: 18px; font-weight: 600; }
+  /* === HEADER === */
+  header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  header h1 { font-size: 16px; font-weight: 600; white-space: nowrap; }
   header h1 span { color: var(--cyan); }
-  header .sub { color: var(--dim); font-size: 12px; }
+  header .sub { color: var(--dim); font-size: 11px; }
+  header .controls { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 
-  .layout { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 70px); }
+  .btn { background: var(--cyan); color: var(--bg); border: none; padding: 6px 16px; border-radius: 5px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .btn-reset { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+  .status-text { color: var(--dim); font-size: 11px; }
 
-  .sidebar { border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; }
-  .sidebar h2 { font-size: 13px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  /* === THREE COLUMN LAYOUT === */
+  .layout { display: grid; grid-template-columns: 260px 1fr 0px; height: calc(100vh - 50px); transition: grid-template-columns 0.3s ease; }
+  .layout.detail-open { grid-template-columns: 260px 1fr 380px; }
 
-  .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; transition: border-color 0.3s; }
-  .agent-card.active { border-color: var(--cyan); box-shadow: 0 0 12px rgba(34,211,238,0.1); }
-  .agent-card.rogue { border-color: var(--red); }
-  .agent-card .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-  .agent-card .role { color: var(--dim); font-size: 11px; margin-bottom: 6px; }
-  .agent-card .did { color: var(--blue); font-size: 10px; word-break: break-all; opacity: 0.7; }
-  .agent-card .stats { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; }
-  .agent-card .stats span { color: var(--green); }
+  /* === LEFT SIDEBAR === */
+  .sidebar { border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .sidebar-section { padding: 12px; }
+  .sidebar-section h2 { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; font-weight: 600; }
 
-  /* Network graph */
-  .network-graph { width: 100%; aspect-ratio: 1; position: relative; }
+  /* Network Graph */
+  .network-graph { width: 100%; aspect-ratio: 1.2; position: relative; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); }
   .network-graph svg { width: 100%; height: 100%; }
-  .graph-node { cursor: default; }
-  .graph-node circle.node-bg { fill: var(--surface); stroke: var(--border); stroke-width: 2; transition: stroke 0.3s, filter 0.3s; }
-  .graph-node.authenticated circle.node-bg { stroke: var(--green); }
-  .graph-node.active-pulse circle.node-bg { stroke: var(--cyan); filter: drop-shadow(0 0 8px rgba(34,211,238,0.4)); }
+  .graph-node { cursor: pointer; }
+  .graph-node circle.node-bg { fill: var(--surface2); stroke: var(--border); stroke-width: 2; transition: all 0.3s; }
+  .graph-node:hover circle.node-bg { stroke: var(--cyan); filter: drop-shadow(0 0 6px rgba(34,211,238,0.3)); }
+  .graph-node.authenticated circle.node-bg { stroke: var(--green); stroke-width: 2; }
+  .graph-node.active-pulse circle.node-bg { stroke: var(--cyan); filter: drop-shadow(0 0 10px rgba(34,211,238,0.5)); }
   .graph-node.rogue circle.node-bg { stroke: var(--red); }
-  .graph-node text.node-emoji { font-size: 20px; text-anchor: middle; dominant-baseline: central; }
-  .graph-node text.node-label { fill: var(--text); font-size: 9px; text-anchor: middle; font-family: inherit; }
-  .graph-edge { stroke: var(--border); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.3; transition: stroke 0.5s, opacity 0.5s; }
-  .graph-edge.auth { stroke: var(--green); stroke-dasharray: none; opacity: 0.6; }
+  .graph-node.selected circle.node-bg { stroke: var(--cyan); stroke-width: 3; filter: drop-shadow(0 0 12px rgba(34,211,238,0.4)); }
+  .graph-node text.node-emoji { font-size: 18px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+  .graph-node text.node-label { fill: var(--dim2); font-size: 9px; text-anchor: middle; font-family: inherit; pointer-events: none; }
+  .graph-edge { stroke: var(--border); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.3; transition: all 0.5s; }
+  .graph-edge.auth { stroke: var(--green); stroke-dasharray: none; opacity: 0.6; stroke-width: 1.5; }
   .graph-edge.rejected { stroke: var(--red); stroke-dasharray: 2 4; opacity: 0.5; }
 
   @keyframes particleMove {
@@ -56,97 +67,228 @@
   }
   .msg-particle {
     position: absolute; width: 6px; height: 6px; border-radius: 50%;
-    animation: particleMove 0.8s ease-in-out forwards;
-    pointer-events: none;
+    animation: particleMove 0.8s ease-in-out forwards; pointer-events: none;
   }
-  .msg-particle.auth { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
-  .msg-particle.vc { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
-  .msg-particle.msg { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .msg-particle.reject { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .msg-particle.auth { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .msg-particle.vc { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
+  .msg-particle.msg { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .msg-particle.reject { background: var(--red); box-shadow: 0 0 8px var(--red); }
 
-  .graph-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; font-size: 10px; color: var(--dim); }
-  .graph-legend .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 3px; vertical-align: middle; }
+  .graph-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 10px; color: var(--dim); }
+  .graph-legend .leg { display: flex; align-items: center; gap: 3px; }
+  .graph-legend .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
 
-  .main { display: flex; flex-direction: column; }
+  /* Agent Cards */
+  .agents-list { flex: 1; overflow-y: auto; padding: 0 12px 12px; }
+  .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; }
+  .agent-card:hover { border-color: var(--cyan); background: var(--surface2); }
+  .agent-card.selected { border-color: var(--cyan); box-shadow: 0 0 12px rgba(34,211,238,0.15); background: rgba(34,211,238,0.05); }
+  .agent-card.active { border-color: var(--cyan); box-shadow: 0 0 12px rgba(34,211,238,0.1); }
+  .agent-card.rogue { border-color: rgba(248,113,113,0.4); }
+  .agent-card .ac-header { display: flex; align-items: center; gap: 8px; }
+  .agent-card .ac-emoji { font-size: 18px; }
+  .agent-card .ac-info { flex: 1; min-width: 0; }
+  .agent-card .ac-name { font-weight: 600; font-size: 12px; }
+  .agent-card .ac-role { color: var(--dim); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .agent-card .ac-did { color: var(--blue); font-size: 9px; opacity: 0.6; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .agent-card .ac-stats { display: flex; gap: 8px; margin-top: 6px; font-size: 10px; color: var(--dim); }
+  .agent-card .ac-stats .stat-val { color: var(--cyan); font-weight: 600; }
 
-  .phase-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
-  .phase-bar .phase-num { background: var(--cyan); color: var(--bg); font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-  .phase-bar .phase-text { font-weight: 600; }
+  /* === MAIN TIMELINE === */
+  .main { display: flex; flex-direction: column; overflow: hidden; }
 
-  .log-area { flex: 1; overflow-y: auto; padding: 16px 20px; }
-  .log-entry { padding: 3px 0; display: flex; gap: 10px; animation: fadeIn 0.2s ease-out; }
-  .log-entry .time { color: var(--dim); min-width: 70px; }
-  .log-entry .agent-name { min-width: 140px; font-weight: 600; }
-  .log-entry.thought .agent-name { color: var(--cyan); }
-  .log-entry.send .agent-name { color: var(--green); }
-  .log-entry .content { flex: 1; }
-  .log-entry.send .content { color: var(--green); }
+  .phase-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .phase-num { background: var(--cyan); color: var(--bg); font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .phase-text { font-weight: 600; font-size: 12px; }
+  .phase-bar .msg-count { margin-left: auto; color: var(--dim); font-size: 11px; }
 
-  .log-entry .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-right: 4px; }
-  .tag-auth { background: rgba(34,211,238,0.15); color: var(--cyan); }
-  .tag-vc { background: rgba(167,139,250,0.15); color: var(--purple); }
-  .tag-msg { background: rgba(74,222,128,0.15); color: var(--green); }
-  .tag-reject { background: rgba(248,113,113,0.15); color: var(--red); }
+  .log-area { flex: 1; overflow-y: auto; padding: 8px 0; }
 
-  .phase-divider { padding: 12px 0; margin: 8px 0; border-top: 1px solid var(--border); }
-  .phase-divider span { color: var(--yellow); font-weight: 600; }
+  /* Log entries */
+  .log-entry { padding: 4px 16px; animation: fadeIn 0.25s ease-out; border-left: 3px solid transparent; transition: background 0.15s; }
+  .log-entry:hover { background: rgba(255,255,255,0.02); }
+  .log-entry.type-send { border-left-color: transparent; }
+  .log-entry.type-thought { border-left-color: transparent; }
 
-  .controls { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 12px; align-items: center; }
-  .btn { background: var(--cyan); color: var(--bg); border: none; padding: 8px 20px; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-  .btn:hover { opacity: 0.85; }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-reset { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .status { color: var(--dim); font-size: 12px; }
+  .log-header { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 2px 0; }
+  .log-time { color: var(--dim); font-size: 11px; min-width: 65px; flex-shrink: 0; }
+  .log-agent { font-weight: 600; font-size: 12px; min-width: 110px; flex-shrink: 0; }
+  .log-agent.thought { color: var(--cyan); }
+  .log-agent.send { color: var(--green); }
+  .log-content { flex: 1; font-size: 12px; min-width: 0; }
+  .log-arrow { color: var(--dim); margin: 0 2px; }
+  .log-target { color: var(--dim2); }
+  .log-expand-icon { color: var(--dim); font-size: 10px; flex-shrink: 0; transition: transform 0.2s; margin-left: 4px; }
+  .log-entry.expanded .log-expand-icon { transform: rotate(90deg); }
 
-  .summary-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; display: none; }
+  /* Tags */
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+  .tag-auth { background: rgba(34,211,238,0.12); color: var(--cyan); }
+  .tag-vc { background: rgba(167,139,250,0.12); color: var(--purple); }
+  .tag-msg { background: rgba(74,222,128,0.12); color: var(--green); }
+  .tag-reject { background: rgba(248,113,113,0.12); color: var(--red); }
+  .tag-replay { background: rgba(251,146,60,0.12); color: var(--orange); }
+
+  /* Verification badge */
+  .verify-badge { font-size: 11px; margin-left: 6px; }
+  .verify-ok { color: var(--green); }
+  .verify-fail { color: var(--red); }
+
+  /* Expandable payload */
+  .log-payload { display: none; margin: 4px 0 8px 73px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .log-entry.expanded .log-payload { display: block; }
+  .payload-header { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 10px; color: var(--dim); }
+  .payload-body { padding: 10px; overflow-x: auto; max-height: 400px; overflow-y: auto; font-size: 11px; line-height: 1.5; }
+  .payload-body pre { white-space: pre-wrap; word-break: break-all; }
+
+  /* JSON syntax highlighting */
+  .json-key { color: var(--json-key); }
+  .json-string { color: var(--json-string); }
+  .json-number { color: var(--json-number); }
+  .json-bool { color: var(--json-bool); }
+  .json-null { color: var(--json-null); }
+  .json-bracket { color: var(--dim2); }
+  .json-proof { display: block; background: var(--json-proof-bg); border-left: 3px solid var(--json-proof-border); padding: 2px 0 2px 6px; margin: 1px 0; border-radius: 0 3px 3px 0; }
+  .json-highlight { background: rgba(34,211,238,0.08); border-left: 3px solid rgba(34,211,238,0.3); padding: 2px 0 2px 6px; margin: 1px 0; border-radius: 0 3px 3px 0; }
+
+  /* Phase divider */
+  .phase-divider { padding: 10px 16px; margin: 4px 0; border-top: 1px solid var(--border); }
+  .phase-divider span { color: var(--yellow); font-weight: 600; font-size: 12px; }
+
+  /* === RIGHT DETAIL PANEL === */
+  .detail-panel { border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+  .detail-panel.hidden { display: none; }
+
+  .detail-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .detail-header .dh-emoji { font-size: 24px; }
+  .detail-header .dh-info { flex: 1; min-width: 0; }
+  .detail-header .dh-name { font-weight: 600; font-size: 14px; }
+  .detail-header .dh-role { color: var(--dim); font-size: 11px; }
+  .detail-header .dh-close { cursor: pointer; color: var(--dim); font-size: 16px; padding: 4px 8px; border-radius: 4px; }
+  .detail-header .dh-close:hover { background: var(--surface2); color: var(--text); }
+  .detail-did { padding: 8px 16px; font-size: 10px; color: var(--blue); word-break: break-all; background: var(--surface); border-bottom: 1px solid var(--border); }
+
+  /* Tabs */
+  .detail-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .detail-tab { padding: 8px 14px; font-size: 11px; color: var(--dim); cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; font-weight: 600; background: none; border-top: none; border-left: none; border-right: none; }
+  .detail-tab:hover { color: var(--text); }
+  .detail-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+  .detail-content { flex: 1; overflow-y: auto; padding: 12px 16px; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
+  .stat-card .stat-label { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .stat-value { font-size: 20px; font-weight: 700; color: var(--cyan); margin-top: 2px; }
+
+  /* Credential cards */
+  .cred-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; overflow: hidden; }
+  .cred-header { padding: 8px 10px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .cred-header:hover { background: var(--surface2); }
+  .cred-type { color: var(--purple); font-weight: 600; font-size: 11px; }
+  .cred-issuer { color: var(--dim); font-size: 10px; }
+  .cred-body { display: none; padding: 8px 10px; border-top: 1px solid var(--border); font-size: 11px; }
+  .cred-card.open .cred-body { display: block; }
+
+  /* Contact cards */
+  .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 6px; }
+  .contact-card .cc-name { font-weight: 600; font-size: 12px; }
+  .contact-card .cc-did { color: var(--blue); font-size: 9px; opacity: 0.6; margin-top: 2px; word-break: break-all; }
+  .contact-card .cc-auth { color: var(--green); font-size: 10px; margin-top: 4px; }
+  .contact-card .cc-creds { color: var(--dim); font-size: 10px; margin-top: 4px; }
+
+  /* History in detail panel */
+  .hist-entry { padding: 4px 0; border-bottom: 1px solid rgba(51,65,85,0.3); font-size: 11px; }
+  .hist-entry:last-child { border-bottom: none; }
+  .hist-time { color: var(--dim); font-size: 10px; }
+  .hist-text { margin-top: 2px; }
+
+  /* === SUMMARY OVERLAY === */
+  .summary-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); }
   .summary-overlay.visible { display: flex; }
-  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; }
-  .summary-card h2 { font-size: 16px; margin-bottom: 16px; }
-  .summary-card .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 560px; width: 90%; }
+  .summary-card h2 { font-size: 16px; margin-bottom: 4px; }
+  .summary-card .sub { color: var(--dim); font-size: 11px; margin-bottom: 16px; }
+  .summary-card .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .summary-card .stat { background: var(--surface2); padding: 10px; border-radius: 6px; }
-  .summary-card .stat .label { color: var(--dim); font-size: 11px; }
-  .summary-card .stat .value { font-size: 20px; font-weight: 700; color: var(--cyan); }
+  .summary-card .stat .label { color: var(--dim); font-size: 10px; }
+  .summary-card .stat .value { font-size: 22px; font-weight: 700; color: var(--cyan); }
+  .summary-card .tech-list { margin-top: 16px; color: var(--dim); font-size: 11px; line-height: 1.7; }
   .summary-card .close-btn { margin-top: 16px; }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+  .empty-state { color: var(--dim); font-size: 11px; text-align: center; padding: 24px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>🏥 <span>Trustworthy Multi-Agent AI</span></h1>
-  <div class="sub">did:btcr2 · BIP-340 Schnorr · W3C Data Integrity · Verifiable Credentials</div>
+  <h1>🔐 <span>Trust Protocol</span></h1>
+  <div class="sub">did:btcr2 · BIP-340 Schnorr · W3C Verifiable Credentials</div>
+  <div class="controls">
+    <span class="status-text" id="status">Ready</span>
+    <button class="btn btn-reset btn-sm" onclick="resetDemo()">↻ Reset</button>
+    <button class="btn btn-sm" id="run-btn" onclick="startDemo()">▶ Run Demo</button>
+  </div>
 </header>
 
-<div class="layout">
+<div class="layout" id="layout">
+  <!-- LEFT SIDEBAR -->
   <div class="sidebar">
-    <h2>Agents</h2>
-    <div id="agents"></div>
-
-    <h2 style="margin-top: 20px;">Network Graph</h2>
-    <div class="network-graph" id="network-graph">
-      <svg id="graph-svg" viewBox="0 0 260 260"></svg>
+    <div class="sidebar-section">
+      <h2>Network</h2>
+      <div class="network-graph" id="network-graph">
+        <svg id="graph-svg" viewBox="0 0 240 200"></svg>
+      </div>
+      <div class="graph-legend">
+        <span class="leg"><span class="dot" style="background:var(--cyan)"></span>Auth</span>
+        <span class="leg"><span class="dot" style="background:var(--purple)"></span>VC</span>
+        <span class="leg"><span class="dot" style="background:var(--green)"></span>Msg</span>
+        <span class="leg"><span class="dot" style="background:var(--red)"></span>Reject</span>
+      </div>
     </div>
-    <div class="graph-legend">
-      <span><span class="dot" style="background:var(--cyan)"></span>Auth</span>
-      <span><span class="dot" style="background:var(--purple)"></span>Credential</span>
-      <span><span class="dot" style="background:var(--green)"></span>Message</span>
-      <span><span class="dot" style="background:var(--red)"></span>Rejected</span>
+    <div class="sidebar-section" style="padding-top:0">
+      <h2>Agents</h2>
     </div>
+    <div class="agents-list" id="agents"></div>
   </div>
 
+  <!-- MAIN TIMELINE -->
   <div class="main">
     <div class="phase-bar">
-      <div class="phase-num" id="phase-num">-</div>
-      <div class="phase-text" id="phase-text">Ready to start</div>
+      <div class="phase-num" id="phase-num">—</div>
+      <div class="phase-text" id="phase-text">Waiting to start</div>
+      <div class="msg-count" id="msg-count"></div>
     </div>
-
     <div class="log-area" id="log-area"></div>
+  </div>
 
-    <div class="controls">
-      <button class="btn" id="run-btn" onclick="startDemo()">▶ Run Demo</button>
-      <button class="btn btn-reset" onclick="resetDemo()">↻ Reset</button>
-      <span class="status" id="status">Click "Run Demo" to begin</span>
+  <!-- RIGHT DETAIL PANEL -->
+  <div class="detail-panel hidden" id="detail-panel">
+    <div class="detail-header">
+      <div class="dh-emoji" id="dp-emoji"></div>
+      <div class="dh-info">
+        <div class="dh-name" id="dp-name"></div>
+        <div class="dh-role" id="dp-role"></div>
+      </div>
+      <div class="dh-close" onclick="closeDetail()">✕</div>
     </div>
+    <div class="detail-did" id="dp-did"></div>
+    <div class="detail-tabs" id="dp-tabs">
+      <button class="detail-tab active" data-tab="stats" onclick="switchTab('stats')">Stats</button>
+      <button class="detail-tab" data-tab="credentials" onclick="switchTab('credentials')">Credentials</button>
+      <button class="detail-tab" data-tab="contacts" onclick="switchTab('contacts')">Contacts</button>
+      <button class="detail-tab" data-tab="history" onclick="switchTab('history')">History</button>
+    </div>
+    <div class="detail-content" id="dp-content"></div>
   </div>
 </div>
 
@@ -155,38 +297,153 @@
 </div>
 
 <script>
-const agentsEl = document.getElementById('agents');
-const logArea = document.getElementById('log-area');
-const phaseNum = document.getElementById('phase-num');
-const phaseText = document.getElementById('phase-text');
-const statusEl = document.getElementById('status');
-const runBtn = document.getElementById('run-btn');
-const graphSvg = document.getElementById('graph-svg');
-const graphContainer = document.getElementById('network-graph');
+const $ = id => document.getElementById(id);
+const agentsEl = $('agents');
+const logArea = $('log-area');
+const phaseNum = $('phase-num');
+const phaseText = $('phase-text');
+const msgCount = $('msg-count');
+const statusEl = $('status');
+const runBtn = $('run-btn');
+const graphSvg = $('graph-svg');
+const graphContainer = $('network-graph');
+const layout = $('layout');
+const detailPanel = $('detail-panel');
 
 let evtSource = null;
-const agents = new Map();
-const graphNodes = new Map(); // did → {x, y, emoji, name}
-const graphEdges = new Map(); // "did1→did2" → {state}
+const agents = new Map(); // did → {name, role, emoji, did, rogue}
+const agentStates = new Map(); // did → full state from agent-state events
+const graphNodes = new Map();
+const graphEdges = new Map();
 let nodeCount = 0;
+let totalMsgs = 0;
+let selectedAgent = null;
+let activeTab = 'stats';
 
-// Node positions: triangle layout for 3 main agents, offset for rogue
 const NODE_POSITIONS = [
-  { x: 130, y: 45 },   // top center (Root)
-  { x: 50, y: 195 },   // bottom left (Triage)
-  { x: 210, y: 195 },  // bottom right (Referral)
-  { x: 210, y: 45 },   // top right (Rogue)
+  { x: 120, y: 35 },
+  { x: 40, y: 160 },
+  { x: 200, y: 160 },
+  { x: 200, y: 35 },
 ];
 
-function truncDid(did) { return did ? did.slice(0, 20) + '...' + did.slice(-6) : ''; }
+function truncDid(did, n=20) { return did ? did.slice(0, n) + '…' + did.slice(-6) : ''; }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function agentNameByDid(did) {
+  const a = agents.get(did);
+  if (a) return a.name;
+  // Partial match
+  for (const [d, a] of agents) {
+    if (did && d && did.startsWith(d.slice(0, 15))) return a.name;
+  }
+  return truncDid(did);
+}
 
+// === JSON SYNTAX HIGHLIGHTING ===
+function syntaxHighlight(json, indent = 0) {
+  if (typeof json === 'string') {
+    try { json = JSON.parse(json); } catch(e) { return escHtml(json); }
+  }
+  return renderValue(json, indent, '');
+}
+
+function renderValue(val, indent, key) {
+  if (val === null) return '<span class="json-null">null</span>';
+  if (typeof val === 'boolean') return `<span class="json-bool">${val}</span>`;
+  if (typeof val === 'number') return `<span class="json-number">${val}</span>`;
+  if (typeof val === 'string') return `<span class="json-string">"${escHtml(val)}"</span>`;
+  if (Array.isArray(val)) return renderArray(val, indent);
+  if (typeof val === 'object') return renderObject(val, indent, key);
+  return escHtml(String(val));
+}
+
+function renderObject(obj, indent, parentKey) {
+  const keys = Object.keys(obj);
+  if (keys.length === 0) return '<span class="json-bracket">{}</span>';
+  const pad = '  '.repeat(indent);
+  const padInner = '  '.repeat(indent + 1);
+  let lines = ['<span class="json-bracket">{</span>'];
+  keys.forEach((k, i) => {
+    const comma = i < keys.length - 1 ? ',' : '';
+    const isProof = k === 'proof';
+    const isHighlight = ['did', 'nonce', 'type', 'challenger', 'verificationMethod', 'proofPurpose', 'cryptosuite'].includes(k);
+    const valStr = renderValue(obj[k], indent + 1, k);
+    let line = `${padInner}<span class="json-key">"${escHtml(k)}"</span>: ${valStr}${comma}`;
+    if (isProof) {
+      line = `<span class="json-proof">${line}</span>`;
+    } else if (isHighlight) {
+      line = `<span class="json-highlight">${line}</span>`;
+    }
+    lines.push(line);
+  });
+  lines.push(pad + '<span class="json-bracket">}</span>');
+  return lines.join('\n');
+}
+
+function renderArray(arr, indent) {
+  if (arr.length === 0) return '<span class="json-bracket">[]</span>';
+  // Short arrays of strings inline
+  if (arr.length <= 3 && arr.every(v => typeof v === 'string' && v.length < 40)) {
+    const items = arr.map(v => `<span class="json-string">"${escHtml(v)}"</span>`).join(', ');
+    return `<span class="json-bracket">[</span>${items}<span class="json-bracket">]</span>`;
+  }
+  const pad = '  '.repeat(indent);
+  const padInner = '  '.repeat(indent + 1);
+  let lines = ['<span class="json-bracket">[</span>'];
+  arr.forEach((v, i) => {
+    const comma = i < arr.length - 1 ? ',' : '';
+    lines.push(padInner + renderValue(v, indent + 1, '') + comma);
+  });
+  lines.push(pad + '<span class="json-bracket">]</span>');
+  return lines.join('\n');
+}
+
+// === MESSAGE CLASSIFICATION ===
+function classifyMsg(msgType) {
+  const t = String(msgType || '');
+  if (t.includes('Rejected') || t.includes('REJECT')) return 'reject';
+  if (t.includes('Auth') || t.includes('auth')) return 'auth';
+  if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation') || t.includes('presentation')) return 'vc';
+  if (t.includes('Signed') || t.includes('Referral') || t.includes('Accepted')) return 'msg';
+  return 'auth';
+}
+
+function tagHtml(msgType) {
+  const cls = classifyMsg(msgType);
+  const labels = { auth: 'AUTH', vc: 'VC', msg: 'MSG', reject: 'REJECT' };
+  return `<span class="tag tag-${cls}">${labels[cls] || cls.toUpperCase()}</span>`;
+}
+
+function thoughtTag(text) {
+  if (!text) return '';
+  if (text.includes('❌') || text.includes('REJECT') || text.includes('REPLAY') || text.includes('replay')) return '<span class="tag tag-reject">REJECT</span>';
+  if (text.includes('✅')) return '<span class="tag tag-auth">OK</span>';
+  if (text.includes('credential') || text.includes('Credential') || text.includes('Presenting')) return '<span class="tag tag-vc">VC</span>';
+  return '';
+}
+
+function proofPreview(payload) {
+  if (!payload || !payload.proof) return '';
+  const p = payload.proof;
+  const suite = p.cryptosuite || '?';
+  const purpose = p.proofPurpose || '?';
+  const sig = p.proofValue ? p.proofValue.slice(0, 12) + '…' : '';
+  return `<span style="color:var(--purple);font-size:10px;margin-left:6px" title="Proof: ${suite}">🔏 ${suite} · ${purpose}${sig ? ' · ' + sig : ''}</span>`;
+}
+
+function verifyBadge(payload) {
+  if (!payload || !payload.proof) return '';
+  // If proof exists, it was verified by the agent protocol
+  return '<span class="verify-badge verify-ok" title="Signature verified">✅</span>';
+}
+
+// === SSE & DEMO CONTROL ===
 function startDemo() {
   runBtn.disabled = true;
-  statusEl.textContent = 'Starting...';
-  // Connect SSE first, then trigger the demo once connection is open
+  statusEl.textContent = 'Starting…';
   connectSSE(() => {
     fetch('/run', { method: 'POST' }).then(r => r.json()).then(d => {
-      statusEl.textContent = d.status === 'started' ? 'Running...' : d.error;
+      statusEl.textContent = d.status === 'started' ? 'Running…' : d.error || 'Error';
     });
   });
 }
@@ -195,26 +452,24 @@ function resetDemo() {
   if (evtSource) evtSource.close();
   logArea.innerHTML = '';
   agentsEl.innerHTML = '';
-  agents.clear();
-  graphNodes.clear();
-  graphEdges.clear();
-  nodeCount = 0;
+  agents.clear(); agentStates.clear();
+  graphNodes.clear(); graphEdges.clear();
+  nodeCount = 0; totalMsgs = 0;
   graphSvg.innerHTML = '';
-  phaseNum.textContent = '-';
-  phaseText.textContent = 'Ready to start';
-  statusEl.textContent = 'Click "Run Demo" to begin';
+  phaseNum.textContent = '—';
+  phaseText.textContent = 'Waiting to start';
+  msgCount.textContent = '';
+  statusEl.textContent = 'Ready';
   runBtn.disabled = false;
-  document.getElementById('summary-overlay').classList.remove('visible');
+  closeDetail();
+  $('summary-overlay').classList.remove('visible');
 }
 
 function connectSSE(onOpen) {
   if (evtSource) evtSource.close();
   evtSource = new EventSource('/events');
   evtSource.onopen = () => { if (onOpen) onOpen(); };
-  evtSource.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    handleEvent(data);
-  };
+  evtSource.onmessage = e => handleEvent(JSON.parse(e.data));
 }
 
 function handleEvent(ev) {
@@ -230,7 +485,7 @@ function handleEvent(ev) {
     phaseText.textContent = ev.description;
     const div = document.createElement('div');
     div.className = 'phase-divider';
-    div.innerHTML = `<span>▸ PHASE ${ev.name}: ${ev.description}</span>`;
+    div.innerHTML = `<span>▸ Phase ${ev.name}: ${ev.description}</span>`;
     logArea.appendChild(div);
     logArea.scrollTop = logArea.scrollHeight;
     return;
@@ -243,80 +498,76 @@ function handleEvent(ev) {
     return;
   }
 
+  if (ev.type === 'agent-state') {
+    agentStates.set(ev.did, ev.state);
+    // Refresh detail if this agent is selected
+    if (selectedAgent === ev.did) renderDetail();
+    renderAgents();
+    return;
+  }
+
   if (ev.type === 'summary') {
     renderSummary(ev);
     return;
   }
 
   if (ev.type === 'thought' || ev.type === 'send') {
+    if (ev.type === 'send') totalMsgs++;
+    msgCount.textContent = totalMsgs ? `${totalMsgs} messages` : '';
     renderLog(ev);
 
-    // Animate graph on sends
     if (ev.type === 'send' && ev.from && ev.to) {
-      const msgClass = classifyMessage(ev.msgType);
-      // Ensure edge exists
+      const msgClass = classifyMsg(ev.msgType);
       ensureEdge(ev.from, ev.to, '');
-      // If it's an auth confirmation, upgrade edge
       if (String(ev.msgType).includes('Confirmed')) {
         ensureEdge(ev.from, ev.to, 'auth');
+        // Mark nodes authenticated
+        const n = graphNodes.get(ev.to);
+        if (n) n.authenticated = true;
+      }
+      if (String(ev.msgType).includes('Rejected')) {
+        ensureEdge(ev.from, ev.to, 'rejected');
       }
       renderGraph();
       animateParticle(ev.from, ev.to, msgClass);
 
-      // Pulse the sending node
-      const gnode = document.getElementById(`gnode-${ev.from?.slice(10,20)}`);
-      if (gnode) {
-        gnode.classList.add('active-pulse');
-        setTimeout(() => gnode.classList.remove('active-pulse'), 500);
-      }
+      const gnode = document.getElementById(`gnode-${cssId(ev.from)}`);
+      if (gnode) { gnode.classList.add('active-pulse'); setTimeout(() => gnode.classList.remove('active-pulse'), 600); }
     }
   }
 }
 
+function cssId(did) { return did ? did.replace(/[^a-zA-Z0-9]/g, '').slice(10, 26) : ''; }
+
+// === RENDER AGENTS SIDEBAR ===
 function renderAgents() {
   agentsEl.innerHTML = '';
   for (const [did, a] of agents) {
+    const state = agentStates.get(did);
     const card = document.createElement('div');
-    card.className = `agent-card${a.rogue ? ' rogue' : ''}`;
-    card.id = `agent-${did.slice(10, 20)}`;
+    card.className = `agent-card${a.rogue ? ' rogue' : ''}${selectedAgent === did ? ' selected' : ''}`;
+    card.onclick = () => openDetail(did);
+    const stats = state?.stats;
     card.innerHTML = `
-      <div class="name">${a.emoji} ${a.name}</div>
-      <div class="role">${a.role}</div>
-      <div class="did">${truncDid(did)}</div>
+      <div class="ac-header">
+        <div class="ac-emoji">${a.emoji}</div>
+        <div class="ac-info">
+          <div class="ac-name">${escHtml(a.name)}</div>
+          <div class="ac-role">${escHtml(a.role)}</div>
+        </div>
+      </div>
+      <div class="ac-did">${truncDid(did, 28)}</div>
+      ${stats ? `<div class="ac-stats">
+        <span>📤 <span class="stat-val">${stats.sent}</span></span>
+        <span>🎫 <span class="stat-val">${stats.credentialsHeld}</span></span>
+        <span>🤝 <span class="stat-val">${stats.contactsCount}</span></span>
+      </div>` : ''}
     `;
     agentsEl.appendChild(card);
   }
-  renderGraph();
 }
 
 // === NETWORK GRAPH ===
-function renderGraph() {
-  // Build SVG content
-  let svg = '';
-
-  // Draw edges first (behind nodes)
-  for (const [key, edge] of graphEdges) {
-    const [fromDid, toDid] = key.split('→');
-    const from = graphNodes.get(fromDid);
-    const to = graphNodes.get(toDid);
-    if (!from || !to) continue;
-    svg += `<line class="graph-edge ${edge.state}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" id="edge-${key.replace('→','-')}"/>`;
-  }
-
-  // Draw nodes
-  for (const [did, node] of graphNodes) {
-    const isRogue = agents.get(did)?.rogue;
-    const cls = isRogue ? 'rogue' : (node.authenticated ? 'authenticated' : '');
-    svg += `<g class="graph-node ${cls}" id="gnode-${did.slice(10,20)}">`;
-    svg += `<circle class="node-bg" cx="${node.x}" cy="${node.y}" r="24"/>`;
-    svg += `<text class="node-emoji" x="${node.x}" y="${node.y}">${node.emoji}</text>`;
-    svg += `<text class="node-label" x="${node.x}" y="${node.y + 36}">${node.name.replace(/^(Root|Triage|Referral|Rogue)\s.*/, '$1')}</text>`;
-    svg += `</g>`;
-  }
-
-  graphSvg.innerHTML = svg;
-}
-
 function addGraphNode(did, name, emoji) {
   if (graphNodes.has(did)) return;
   const pos = NODE_POSITIONS[nodeCount % NODE_POSITIONS.length];
@@ -324,116 +575,238 @@ function addGraphNode(did, name, emoji) {
   nodeCount++;
 }
 
-function edgeKey(did1, did2) {
-  return [did1, did2].sort().join('→');
-}
-
-function ensureEdge(did1, did2, state) {
-  const key = edgeKey(did1, did2);
-  const existing = graphEdges.get(key);
-  // Only upgrade state: none → auth → rejected
-  if (!existing || state === 'auth' || (state === 'rejected' && existing.state !== 'auth')) {
-    graphEdges.set(key, { state: state || '' });
+function edgeKey(d1, d2) { return [d1, d2].sort().join('→'); }
+function ensureEdge(d1, d2, state) {
+  const k = edgeKey(d1, d2);
+  const ex = graphEdges.get(k);
+  if (!ex || state === 'auth' || (state === 'rejected' && ex.state !== 'auth')) {
+    graphEdges.set(k, { state: state || '' });
   }
 }
 
-function classifyMessage(msgType) {
-  const t = String(msgType || '');
-  if (t.includes('Auth') || t.includes('auth')) return 'auth';
-  if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation') || t.includes('presentation')) return 'vc';
-  if (t.includes('Signed') || t.includes('Referral') || t.includes('Accepted')) return 'msg';
-  if (t.includes('Rejected') || t.includes('reject') || t.includes('REJECT')) return 'reject';
-  return 'auth';
+function renderGraph() {
+  let svg = '';
+  for (const [key, edge] of graphEdges) {
+    const [from, to] = key.split('→');
+    const f = graphNodes.get(from), t = graphNodes.get(to);
+    if (!f || !t) continue;
+    svg += `<line class="graph-edge ${edge.state}" x1="${f.x}" y1="${f.y}" x2="${t.x}" y2="${t.y}"/>`;
+  }
+  for (const [did, node] of graphNodes) {
+    const isRogue = agents.get(did)?.rogue;
+    const sel = selectedAgent === did ? ' selected' : '';
+    const cls = isRogue ? 'rogue' : (node.authenticated ? 'authenticated' : '');
+    svg += `<g class="graph-node ${cls}${sel}" id="gnode-${cssId(did)}" onclick="openDetail('${did}')">`;
+    svg += `<circle class="node-bg" cx="${node.x}" cy="${node.y}" r="22"/>`;
+    svg += `<text class="node-emoji" x="${node.x}" y="${node.y}">${node.emoji}</text>`;
+    svg += `<text class="node-label" x="${node.x}" y="${node.y + 33}">${escHtml(node.name.replace(/^(\w+)\s.*/, '$1'))}</text>`;
+    svg += `</g>`;
+  }
+  graphSvg.innerHTML = svg;
 }
 
 function animateParticle(fromDid, toDid, type) {
-  const from = graphNodes.get(fromDid);
-  const to = graphNodes.get(toDid);
+  const from = graphNodes.get(fromDid), to = graphNodes.get(toDid);
   if (!from || !to) return;
-
-  // Get SVG's bounding rect to convert coordinates
-  const rect = graphContainer.getBoundingClientRect();
-  const svgRect = graphSvg.getBoundingClientRect();
-  const scaleX = svgRect.width / 260;
-  const scaleY = svgRect.height / 260;
-
+  const rect = graphSvg.getBoundingClientRect();
+  const scaleX = rect.width / 240, scaleY = rect.height / 200;
   const particle = document.createElement('div');
   particle.className = `msg-particle ${type}`;
-
-  // Use CSS offset-path for smooth motion along a line
-  const x1 = from.x * scaleX;
-  const y1 = from.y * scaleY;
-  const x2 = to.x * scaleX;
-  const y2 = to.y * scaleY;
-
+  const x1 = from.x * scaleX, y1 = from.y * scaleY, x2 = to.x * scaleX, y2 = to.y * scaleY;
   particle.style.offsetPath = `path('M ${x1} ${y1} L ${x2} ${y2}')`;
-  particle.style.left = '0';
-  particle.style.top = '0';
-
+  particle.style.left = '0'; particle.style.top = '0';
   graphContainer.appendChild(particle);
   setTimeout(() => particle.remove(), 850);
 }
 
-function tagFor(text) {
-  if (!text) return '';
-  const t = String(text);
-  if (t.includes('Auth') || t.includes('auth')) return '<span class="tag tag-auth">AUTH</span>';
-  if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation')) return '<span class="tag tag-vc">VC</span>';
-  if (t.includes('Signed') || t.includes('Referral')) return '<span class="tag tag-msg">MSG</span>';
-  if (t.includes('Rejected') || t.includes('rejected')) return '<span class="tag tag-reject">REJECT</span>';
-  if (t.includes('❌') || t.includes('Rogue') || t.includes('REJECTED') || t.includes('REPLAY') || t.includes('replay')) return '<span class="tag tag-reject">REJECT</span>';
-  return '';
-}
-
+// === RENDER LOG ===
 function renderLog(ev) {
   const div = document.createElement('div');
-  div.className = `log-entry ${ev.type}`;
   const time = new Date(ev.time).toISOString().split('T')[1].split('.')[0];
-  const name = ev.agent || '';
 
   if (ev.type === 'thought') {
+    div.className = 'log-entry type-thought';
     div.innerHTML = `
-      <span class="time">${time}</span>
-      <span class="agent-name">${name}</span>
-      <span class="content">${tagFor(ev.text)}💭 ${escHtml(ev.text)}</span>
+      <div class="log-header">
+        <span class="log-time">${time}</span>
+        <span class="log-agent thought">${escHtml(ev.agent)}</span>
+        <span class="log-content">${thoughtTag(ev.text)}💭 ${escHtml(ev.text)}</span>
+      </div>
     `;
   } else if (ev.type === 'send') {
-    const toAgent = [...agents.entries()].find(([d]) => ev.to?.startsWith(d?.slice(0, 15)));
-    const toName = toAgent ? toAgent[1].name : truncDid(ev.to);
+    const toName = agentNameByDid(ev.to);
+    const hasPayload = ev.payload && typeof ev.payload === 'object';
+    div.className = 'log-entry type-send';
     div.innerHTML = `
-      <span class="time">${time}</span>
-      <span class="agent-name">${name}</span>
-      <span class="content">${tagFor(ev.msgType)}📤 → ${toName} <span style="color:var(--dim)">[${ev.msgType}]</span></span>
+      <div class="log-header" ${hasPayload ? 'onclick="togglePayload(this)"' : ''}>
+        <span class="log-time">${time}</span>
+        <span class="log-agent send">${escHtml(ev.agent)}</span>
+        <span class="log-content">
+          ${tagHtml(ev.msgType)}
+          <span class="log-arrow">→</span>
+          <span class="log-target">${escHtml(toName)}</span>
+          <span style="color:var(--dim);margin-left:4px">[${escHtml(ev.msgType)}]</span>
+          ${proofPreview(ev.payload)}
+          ${verifyBadge(ev.payload)}
+        </span>
+        ${hasPayload ? '<span class="log-expand-icon">▶</span>' : ''}
+      </div>
+      ${hasPayload ? `
+      <div class="log-payload">
+        <div class="payload-header">
+          <span>${escHtml(ev.msgType)}</span>
+          <span style="margin-left:auto">${ev.payload.proof ? '🔏 Signed' : '📄 Unsigned'}</span>
+        </div>
+        <div class="payload-body"><pre>${syntaxHighlight(ev.payload)}</pre></div>
+      </div>` : ''}
     `;
   }
 
   logArea.appendChild(div);
   logArea.scrollTop = logArea.scrollHeight;
 
-  // Flash the agent card
-  const agentInfo = [...agents.entries()].find(([d, a]) => a.name === name);
+  // Flash agent card
+  const agentInfo = [...agents.entries()].find(([d, a]) => a.name === ev.agent);
   if (agentInfo) {
-    const card = document.getElementById(`agent-${agentInfo[0].slice(10, 20)}`);
-    if (card) {
-      card.classList.add('active');
-      setTimeout(() => card.classList.remove('active'), 400);
-    }
+    const cards = agentsEl.querySelectorAll('.agent-card');
+    const idx = [...agents.keys()].indexOf(agentInfo[0]);
+    if (cards[idx]) { cards[idx].classList.add('active'); setTimeout(() => cards[idx].classList.remove('active'), 400); }
   }
 }
 
+function togglePayload(header) {
+  header.closest('.log-entry').classList.toggle('expanded');
+}
+
+// === DETAIL PANEL ===
+function openDetail(did) {
+  selectedAgent = did;
+  detailPanel.classList.remove('hidden');
+  layout.classList.add('detail-open');
+  renderAgents();
+  renderGraph();
+
+  const a = agents.get(did);
+  if (!a) return;
+  $('dp-emoji').textContent = a.emoji;
+  $('dp-name').textContent = a.name;
+  $('dp-role').textContent = a.role;
+  $('dp-did').textContent = did;
+
+  // Try to fetch fresh state
+  fetch(`/agent/${encodeURIComponent(did)}`).then(r => r.ok ? r.json() : null).then(state => {
+    if (state) agentStates.set(did, state);
+    renderDetail();
+  }).catch(() => renderDetail());
+}
+
+function closeDetail() {
+  selectedAgent = null;
+  detailPanel.classList.add('hidden');
+  layout.classList.remove('detail-open');
+  renderAgents();
+  renderGraph();
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderDetail();
+}
+
+function renderDetail() {
+  const content = $('dp-content');
+  const state = agentStates.get(selectedAgent);
+  if (!state) {
+    content.innerHTML = '<div class="empty-state">No data yet — run the demo first</div>';
+    return;
+  }
+
+  if (activeTab === 'stats') {
+    content.innerHTML = `
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Messages Sent</div><div class="stat-value">${state.stats.sent}</div></div>
+        <div class="stat-card"><div class="stat-label">Thoughts</div><div class="stat-value">${state.stats.thoughts}</div></div>
+        <div class="stat-card"><div class="stat-label">Credentials Held</div><div class="stat-value">${state.stats.credentialsHeld}</div></div>
+        <div class="stat-card"><div class="stat-label">Contacts</div><div class="stat-value">${state.stats.contactsCount}</div></div>
+      </div>
+      <div style="margin-top:12px">
+        <h3 style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Identity</h3>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:10px;word-break:break-all;">
+          <div style="color:var(--dim);margin-bottom:4px">DID</div>
+          <div style="color:var(--blue)">${escHtml(state.did)}</div>
+          <div style="color:var(--dim);margin-top:8px;margin-bottom:4px">Role</div>
+          <div>${escHtml(state.role)}</div>
+        </div>
+      </div>
+    `;
+  } else if (activeTab === 'credentials') {
+    if (!state.credentials || state.credentials.length === 0) {
+      content.innerHTML = '<div class="empty-state">No credentials held</div>';
+      return;
+    }
+    content.innerHTML = state.credentials.map((vc, i) => `
+      <div class="cred-card" onclick="this.classList.toggle('open')">
+        <div class="cred-header">
+          <span class="tag tag-vc">VC</span>
+          <span class="cred-type">${escHtml((vc.type || [])[1] || 'Unknown')}</span>
+          <span class="cred-issuer" style="margin-left:auto">from ${truncDid(vc.issuer, 16)}</span>
+        </div>
+        <div class="cred-body">
+          <pre style="font-size:10px;line-height:1.5">${syntaxHighlight(vc)}</pre>
+        </div>
+      </div>
+    `).join('');
+  } else if (activeTab === 'contacts') {
+    const contacts = state.contacts ? Object.entries(state.contacts) : [];
+    if (contacts.length === 0) {
+      content.innerHTML = '<div class="empty-state">No authenticated contacts</div>';
+      return;
+    }
+    content.innerHTML = contacts.map(([did, c]) => {
+      const name = agentNameByDid(did);
+      const credsList = (c.credentials || []).map(vc => `<div style="margin-top:4px"><span class="tag tag-vc" style="font-size:9px">VC</span> ${escHtml((vc.type||[])[1] || 'Unknown')} from ${truncDid(vc.issuer, 12)}</div>`).join('');
+      return `
+        <div class="contact-card">
+          <div class="cc-name">${escHtml(name)}</div>
+          <div class="cc-did">${escHtml(did)}</div>
+          <div class="cc-auth">✅ Authenticated${c.authenticatedAt ? ' · ' + new Date(c.authenticatedAt).toISOString().split('T')[1].split('.')[0] : ''}</div>
+          ${credsList ? `<div class="cc-creds" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px">Presented credentials:${credsList}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  } else if (activeTab === 'history') {
+    if (!state.log || state.log.length === 0) {
+      content.innerHTML = '<div class="empty-state">No history</div>';
+      return;
+    }
+    content.innerHTML = state.log.map(entry => {
+      const time = new Date(entry.time).toISOString().split('T')[1].split('.')[0];
+      if (entry.type === 'thought') {
+        return `<div class="hist-entry"><span class="hist-time">${time}</span> <span style="color:var(--cyan)">💭</span> ${escHtml(entry.text)}</div>`;
+      } else if (entry.type === 'send') {
+        return `<div class="hist-entry"><span class="hist-time">${time}</span> ${tagHtml(entry.msgType)} → ${escHtml(agentNameByDid(entry.to))}</div>`;
+      }
+      return '';
+    }).join('');
+  }
+}
+
+// === SUMMARY ===
 function renderSummary(ev) {
-  const card = document.getElementById('summary-card');
+  const card = $('summary-card');
   card.innerHTML = `
     <h2>📊 Demo Complete</h2>
-    <p style="color: var(--dim); margin-bottom: 12px;">All interactions cryptographically verified</p>
+    <div class="sub">All interactions cryptographically verified via BIP-340 Schnorr signatures</div>
     <div class="stat-grid">
       <div class="stat"><div class="label">Messages Exchanged</div><div class="value">${ev.stats.totalMessages}</div></div>
       <div class="stat"><div class="label">Reasoning Steps</div><div class="value">${ev.stats.totalThoughts}</div></div>
       <div class="stat"><div class="label">Credentials Issued</div><div class="value">${ev.stats.credentialsIssued}</div></div>
-      <div class="stat"><div class="label">Rogue Attempts Blocked</div><div class="value" style="color: var(--red);">${ev.stats.rogueBlocked}</div></div>
-      <div class="stat"><div class="label">Replay Attacks Detected</div><div class="value" style="color: var(--orange);">${ev.stats.replayBlocked || 0}</div></div>
+      <div class="stat"><div class="label">Presentations Verified</div><div class="value">${ev.stats.presentationsVerified}</div></div>
+      <div class="stat"><div class="label" style="color:var(--red)">Rogue Attempts Blocked</div><div class="value" style="color:var(--red)">${ev.stats.rogueBlocked}</div></div>
+      <div class="stat"><div class="label" style="color:var(--orange)">Replay Attacks Detected</div><div class="value" style="color:var(--orange)">${ev.stats.replayBlocked || 0}</div></div>
     </div>
-    <div style="margin-top: 16px; color: var(--dim); font-size: 11px; line-height: 1.6;">
+    <div class="tech-list">
       ✓ did:btcr2 on mutinynet (offline, no Bitcoin tx)<br>
       ✓ BIP-340 Schnorr signatures (bip340-jcs-2025)<br>
       ✓ W3C Data Integrity proofs<br>
@@ -444,11 +817,7 @@ function renderSummary(ev) {
     </div>
     <button class="btn close-btn" onclick="document.getElementById('summary-overlay').classList.remove('visible')">Close</button>
   `;
-  document.getElementById('summary-overlay').classList.add('visible');
-}
-
-function escHtml(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  $('summary-overlay').classList.add('visible');
 }
 </script>
 </body>

@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3457;
 let demoLogs = [];
 let sseClients = [];
 let demoRunning = false;
+let demoAgents = new Map(); // did → Agent instance
 
 function broadcast(event) {
   const data = `data: ${JSON.stringify(event)}\n\n`;
@@ -24,6 +25,7 @@ async function runDemo() {
   demoRunning = true;
   demoLogs = [];
 
+  demoAgents = new Map();
   const net = new Network();
   net.onLogCallback = (entry) => {
     demoLogs.push(entry);
@@ -49,6 +51,9 @@ async function runDemo() {
   net.register(root);
   net.register(triage);
   net.register(referral);
+  demoAgents.set(root.did, root);
+  demoAgents.set(triage.did, triage);
+  demoAgents.set(referral.did, referral);
 
   // Broadcast agent info
   for (const agent of [root, triage, referral]) {
@@ -156,6 +161,7 @@ async function runDemo() {
 
   const rogue = await new Agent('Rogue Agent', 'Unauthorized — No credentials', '🦹').init('mutinynet');
   net.register(rogue);
+  demoAgents.set(rogue.did, rogue);
   broadcast({ time: Date.now(), type: 'agent', name: rogue.name, did: rogue.did, role: rogue.role, emoji: rogue.emoji, rogue: true });
 
   rogue.think('I\'m going to try to send a referral without authenticating...');
@@ -206,6 +212,11 @@ async function runDemo() {
 
   // Done
   phase('done', 'Demo complete');
+  // Broadcast agent state snapshots
+  for (const agent of [root, triage, referral, rogue]) {
+    broadcast({ time: Date.now(), type: 'agent-state', did: agent.did, state: agent.getState() });
+  }
+
   broadcast({
     time: Date.now(), type: 'summary',
     agents: [root, triage, referral, rogue].map(a => ({
@@ -236,6 +247,31 @@ const server = http.createServer((req, res) => {
     // Send existing logs
     for (const entry of demoLogs) {
       res.write(`data: ${JSON.stringify(entry)}\n\n`);
+    }
+    return;
+  }
+
+  // Agent state endpoints
+  if (req.url === '/agents') {
+    const states = {};
+    for (const [did, agent] of demoAgents) {
+      states[did] = agent.getState();
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+    res.end(JSON.stringify(states));
+    return;
+  }
+
+  const agentMatch = req.url.match(/^\/agent\/(.+)$/);
+  if (agentMatch) {
+    const did = decodeURIComponent(agentMatch[1]);
+    const agent = demoAgents.get(did);
+    if (agent) {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+      res.end(JSON.stringify(agent.getState()));
+    } else {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Agent not found' }));
     }
     return;
   }
