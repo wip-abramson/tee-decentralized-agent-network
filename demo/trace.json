@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-08T01:08:24.252Z",
+  "timestamp": "2026-03-08T01:40:37.810Z",
   "agents": [
     {
       "name": "🏛️ Root Authority",
       "role": "Trust Root — NHS Digital",
-      "did": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "did": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "contacts": [
         {
-          "did": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+          "did": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
           "name": "🏥 Triage Agent",
           "authenticated": true,
           "credentials": 0
         },
         {
-          "did": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+          "did": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
           "name": "📋 Referral Agent",
           "authenticated": true,
           "credentials": 0
@@ -24,16 +24,16 @@
     {
       "name": "🏥 Triage Agent",
       "role": "Hospital A — Emergency Triage",
-      "did": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "did": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "contacts": [
         {
-          "did": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+          "did": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
           "name": "🏛️ Root Authority",
           "authenticated": true,
           "credentials": 0
         },
         {
-          "did": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+          "did": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
           "name": "📋 Referral Agent",
           "authenticated": true,
           "credentials": 1
@@ -45,30 +45,30 @@
             "VerifiableCredential",
             "AgentAuthorization"
           ],
-          "issuer": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-          "subject": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs"
+          "issuer": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+          "subject": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg"
         }
       ]
     },
     {
       "name": "📋 Referral Agent",
       "role": "Hospital B — Neurology Intake",
-      "did": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "did": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "contacts": [
         {
-          "did": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+          "did": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
           "name": "🏛️ Root Authority",
           "authenticated": true,
           "credentials": 0
         },
         {
-          "did": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+          "did": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
           "name": "🏥 Triage Agent",
           "authenticated": true,
           "credentials": 1
         },
         {
-          "did": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+          "did": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
           "name": "🦹 Rogue Agent",
           "authenticated": true,
           "credentials": 0
@@ -80,18 +80,18 @@
             "VerifiableCredential",
             "AgentAuthorization"
           ],
-          "issuer": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-          "subject": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5"
+          "issuer": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+          "subject": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq"
         }
       ]
     },
     {
       "name": "🦹 Rogue Agent",
       "role": "Unauthorized — No credentials",
-      "did": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "did": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "contacts": [
         {
-          "did": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+          "did": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
           "name": "📋 Referral Agent",
           "authenticated": true,
           "credentials": 0
@@ -102,917 +102,917 @@
   ],
   "protocolLog": [
     {
-      "time": 1772932103017,
+      "time": 1772934036578,
       "agent": "🏛️ Root Authority",
       "type": "thought",
       "text": "I need to authenticate the Triage Agent before issuing credentials."
     },
     {
-      "time": 1772932103017,
+      "time": 1772934036579,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103018,
+      "time": 1772934036579,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5pwhnc200j56... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5pj4q6dnj2rw... Signing response."
     },
     {
-      "time": 1772932103065,
+      "time": 1772934036629,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103065,
+      "time": 1772934036629,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "I don't know them either. Sending mutual auth challenge."
     },
     {
-      "time": 1772932103065,
+      "time": 1772934036629,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103065,
+      "time": 1772934036629,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwvgwlaf8d8... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5prvrtshtaqn... Verifying."
     },
     {
-      "time": 1772932103071,
+      "time": 1772934036635,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwvgwlaf8d8... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5prvrtshtaqn... — signature valid."
     },
     {
-      "time": 1772932103071,
+      "time": 1772934036635,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103071,
+      "time": 1772934036635,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5pwvgwlaf8d8... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5prvrtshtaqn... Signing response."
     },
     {
-      "time": 1772932103077,
+      "time": 1772934036643,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103077,
+      "time": 1772934036643,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Unknown sender did:btcr2:k1q5pwhnc200j56... Demanding authentication."
+      "text": "Unknown sender did:btcr2:k1q5pj4q6dnj2rw... Demanding authentication."
     },
     {
-      "time": 1772932103077,
+      "time": 1772934036643,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103077,
+      "time": 1772934036643,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwhnc200j56... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5pj4q6dnj2rw... Verifying."
     },
     {
-      "time": 1772932103084,
+      "time": 1772934036647,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwhnc200j56... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5pj4q6dnj2rw... — signature valid."
     },
     {
-      "time": 1772932103084,
+      "time": 1772934036647,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103084,
+      "time": 1772934036647,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5pwvgwlaf8d8... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5prvrtshtaqn... Signing response."
     },
     {
-      "time": 1772932103092,
+      "time": 1772934036653,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103093,
+      "time": 1772934036653,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "did:btcr2:k1q5pwvgwlaf8d8... confirmed our authentication."
+      "text": "did:btcr2:k1q5prvrtshtaqn... confirmed our authentication."
     },
     {
-      "time": 1772932103093,
+      "time": 1772934036653,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwhnc200j56... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5pj4q6dnj2rw... Verifying."
     },
     {
-      "time": 1772932103099,
+      "time": 1772934036657,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwhnc200j56... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5pj4q6dnj2rw... — signature valid."
     },
     {
-      "time": 1772932103099,
+      "time": 1772934036657,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103099,
+      "time": 1772934036657,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "did:btcr2:k1q5pwvgwlaf8d8... confirmed our authentication."
+      "text": "did:btcr2:k1q5prvrtshtaqn... confirmed our authentication."
     },
     {
-      "time": 1772932103199,
+      "time": 1772934036758,
       "agent": "🏛️ Root Authority",
       "type": "thought",
       "text": "Now authenticating the Referral Agent."
     },
     {
-      "time": 1772932103200,
+      "time": 1772934036758,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103200,
+      "time": 1772934036758,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5pwhnc200j56... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5pj4q6dnj2rw... Signing response."
     },
     {
-      "time": 1772932103205,
+      "time": 1772934036763,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103205,
+      "time": 1772934036763,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "I don't know them either. Sending mutual auth challenge."
     },
     {
-      "time": 1772932103205,
+      "time": 1772934036763,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103205,
+      "time": 1772934036763,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5paudj5njajd... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5p4e9q3xyf9j... Verifying."
     },
     {
-      "time": 1772932103209,
+      "time": 1772934036767,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5paudj5njajd... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5p4e9q3xyf9j... — signature valid."
     },
     {
-      "time": 1772932103209,
+      "time": 1772934036768,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103209,
+      "time": 1772934036768,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5paudj5njajd... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5p4e9q3xyf9j... Signing response."
     },
     {
-      "time": 1772932103213,
+      "time": 1772934036772,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103214,
+      "time": 1772934036772,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Unknown sender did:btcr2:k1q5pwhnc200j56... Demanding authentication."
+      "text": "Unknown sender did:btcr2:k1q5pj4q6dnj2rw... Demanding authentication."
     },
     {
-      "time": 1772932103214,
+      "time": 1772934036772,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103214,
+      "time": 1772934036772,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwhnc200j56... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5pj4q6dnj2rw... Verifying."
     },
     {
-      "time": 1772932103217,
+      "time": 1772934036776,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwhnc200j56... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5pj4q6dnj2rw... — signature valid."
     },
     {
-      "time": 1772932103217,
+      "time": 1772934036776,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103217,
+      "time": 1772934036776,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5paudj5njajd... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5p4e9q3xyf9j... Signing response."
     },
     {
-      "time": 1772932103222,
+      "time": 1772934036780,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103222,
+      "time": 1772934036780,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "did:btcr2:k1q5paudj5njajd... confirmed our authentication."
+      "text": "did:btcr2:k1q5p4e9q3xyf9j... confirmed our authentication."
     },
     {
-      "time": 1772932103222,
+      "time": 1772934036780,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwhnc200j56... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5pj4q6dnj2rw... Verifying."
     },
     {
-      "time": 1772932103225,
+      "time": 1772934036784,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwhnc200j56... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5pj4q6dnj2rw... — signature valid."
     },
     {
-      "time": 1772932103225,
+      "time": 1772934036784,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103225,
+      "time": 1772934036784,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "did:btcr2:k1q5paudj5njajd... confirmed our authentication."
+      "text": "did:btcr2:k1q5p4e9q3xyf9j... confirmed our authentication."
     },
     {
-      "time": 1772932103326,
+      "time": 1772934036885,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Issuing AgentAuthorization credential to did:btcr2:k1q5pwvgwlaf8d8..."
+      "text": "Issuing AgentAuthorization credential to did:btcr2:k1q5prvrtshtaqn..."
     },
     {
-      "time": 1772932103332,
+      "time": 1772934036890,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": [
         "VerifiableCredential",
         "AgentAuthorization"
       ]
     },
     {
-      "time": 1772932103332,
+      "time": 1772934036890,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received credential from did:btcr2:k1q5pwhnc200j56... Verifying issuer signature."
+      "text": "Received credential from did:btcr2:k1q5pj4q6dnj2rw... Verifying issuer signature."
     },
     {
-      "time": 1772932103336,
+      "time": 1772934036893,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "✅ Stored AgentAuthorization credential. I now have 1 credential(s)."
     },
     {
-      "time": 1772932103436,
+      "time": 1772934036994,
       "agent": "🏛️ Root Authority",
       "type": "thought",
-      "text": "Issuing AgentAuthorization credential to did:btcr2:k1q5paudj5njajd..."
+      "text": "Issuing AgentAuthorization credential to did:btcr2:k1q5p4e9q3xyf9j..."
     },
     {
-      "time": 1772932103441,
+      "time": 1772934036998,
       "agent": "🏛️ Root Authority",
       "type": "send",
-      "from": "did:btcr2:k1q5pwhnc200j56tua8vndv9lumjktdctemx7xfym9mx66lv73lqc9anq5nragw",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pj4q6dnj2rwzsw5epv4cycrfu9amzj63rxl8gz9eunmaxa7f7q3hgykfy04",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": [
         "VerifiableCredential",
         "AgentAuthorization"
       ]
     },
     {
-      "time": 1772932103441,
+      "time": 1772934036998,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received credential from did:btcr2:k1q5pwhnc200j56... Verifying issuer signature."
+      "text": "Received credential from did:btcr2:k1q5pj4q6dnj2rw... Verifying issuer signature."
     },
     {
-      "time": 1772932103444,
+      "time": 1772934037003,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "✅ Stored AgentAuthorization credential. I now have 1 credential(s)."
     },
     {
-      "time": 1772932103544,
+      "time": 1772934037104,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "Patient needs urgent neurology referral. Contacting Referral Agent at Hospital B."
     },
     {
-      "time": 1772932103544,
+      "time": 1772934037104,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "I don't know this agent yet. Initiating DID Auth."
     },
     {
-      "time": 1772932103544,
+      "time": 1772934037104,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103545,
+      "time": 1772934037104,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5pwvgwlaf8d8... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5prvrtshtaqn... Signing response."
     },
     {
-      "time": 1772932103550,
+      "time": 1772934037109,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103550,
+      "time": 1772934037109,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "I don't know them either. Sending mutual auth challenge."
     },
     {
-      "time": 1772932103550,
+      "time": 1772934037109,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103550,
+      "time": 1772934037109,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5paudj5njajd... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5p4e9q3xyf9j... Verifying."
     },
     {
-      "time": 1772932103553,
+      "time": 1772934037112,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5paudj5njajd... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5p4e9q3xyf9j... — signature valid."
     },
     {
-      "time": 1772932103553,
+      "time": 1772934037112,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103553,
+      "time": 1772934037112,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5paudj5njajd... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5p4e9q3xyf9j... Signing response."
     },
     {
-      "time": 1772932103559,
+      "time": 1772934037117,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103559,
+      "time": 1772934037117,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Unknown sender did:btcr2:k1q5pwvgwlaf8d8... Demanding authentication."
+      "text": "Unknown sender did:btcr2:k1q5prvrtshtaqn... Demanding authentication."
     },
     {
-      "time": 1772932103559,
+      "time": 1772934037118,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932103559,
+      "time": 1772934037118,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwvgwlaf8d8... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5prvrtshtaqn... Verifying."
     },
     {
-      "time": 1772932103563,
+      "time": 1772934037121,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwvgwlaf8d8... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5prvrtshtaqn... — signature valid."
     },
     {
-      "time": 1772932103563,
+      "time": 1772934037121,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103563,
+      "time": 1772934037121,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5paudj5njajd... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5p4e9q3xyf9j... Signing response."
     },
     {
-      "time": 1772932103567,
+      "time": 1772934037125,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932103567,
+      "time": 1772934037125,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "did:btcr2:k1q5paudj5njajd... confirmed our authentication."
+      "text": "did:btcr2:k1q5p4e9q3xyf9j... confirmed our authentication."
     },
     {
-      "time": 1772932103567,
+      "time": 1772934037125,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5pwvgwlaf8d8... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5prvrtshtaqn... Verifying."
     },
     {
-      "time": 1772932103571,
+      "time": 1772934037129,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5pwvgwlaf8d8... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5prvrtshtaqn... — signature valid."
     },
     {
-      "time": 1772932103571,
+      "time": 1772934037129,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932103571,
+      "time": 1772934037129,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "did:btcr2:k1q5paudj5njajd... confirmed our authentication."
+      "text": "did:btcr2:k1q5p4e9q3xyf9j... confirmed our authentication."
     },
     {
-      "time": 1772932103672,
+      "time": 1772934037228,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "Before accepting a referral, I need to verify Triage Agent's authorization."
     },
     {
-      "time": 1772932103672,
+      "time": 1772934037228,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5pwvgwlaf8d8..."
+      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5prvrtshtaqn..."
     },
     {
-      "time": 1772932103672,
+      "time": 1772934037229,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "PresentationRequest"
     },
     {
-      "time": 1772932103672,
+      "time": 1772934037229,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Presenting 1 credential(s) to did:btcr2:k1q5paudj5njajd..."
+      "text": "Presenting 1 credential(s) to did:btcr2:k1q5p4e9q3xyf9j..."
     },
     {
-      "time": 1772932103677,
+      "time": 1772934037233,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": [
         "VerifiablePresentation"
       ]
     },
     {
-      "time": 1772932103677,
+      "time": 1772934037234,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received presentation from did:btcr2:k1q5pwvgwlaf8d8... Verifying."
+      "text": "Received presentation from did:btcr2:k1q5prvrtshtaqn... Verifying."
     },
     {
-      "time": 1772932103684,
+      "time": 1772934037240,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "  ✅ AgentAuthorization from did:btcr2:k1q5pwhnc200j56... — valid"
+      "text": "  ✅ AgentAuthorization from did:btcr2:k1q5pj4q6dnj2rw... — valid"
     },
     {
-      "time": 1772932103684,
+      "time": 1772934037240,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "  🔗 Issuer is a known, authenticated contact — TRUSTED"
     },
     {
-      "time": 1772932103684,
+      "time": 1772934037240,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Presentation fully verified. did:btcr2:k1q5pwvgwlaf8d8... is authorized."
+      "text": "✅ Presentation fully verified. did:btcr2:k1q5prvrtshtaqn... is authorized."
     },
     {
-      "time": 1772932103784,
+      "time": 1772934037341,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "I should verify Referral Agent's authority to accept patients too."
     },
     {
-      "time": 1772932103785,
+      "time": 1772934037341,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5paudj5njajd..."
+      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5p4e9q3xyf9j..."
     },
     {
-      "time": 1772932103785,
+      "time": 1772934037341,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "PresentationRequest"
     },
     {
-      "time": 1772932103785,
+      "time": 1772934037341,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Presenting 1 credential(s) to did:btcr2:k1q5pwvgwlaf8d8..."
+      "text": "Presenting 1 credential(s) to did:btcr2:k1q5prvrtshtaqn..."
     },
     {
-      "time": 1772932103789,
+      "time": 1772934037345,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": [
         "VerifiablePresentation"
       ]
     },
     {
-      "time": 1772932103790,
+      "time": 1772934037346,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "Received presentation from did:btcr2:k1q5paudj5njajd... Verifying."
+      "text": "Received presentation from did:btcr2:k1q5p4e9q3xyf9j... Verifying."
     },
     {
-      "time": 1772932103796,
+      "time": 1772934037353,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "  ✅ AgentAuthorization from did:btcr2:k1q5pwhnc200j56... — valid"
+      "text": "  ✅ AgentAuthorization from did:btcr2:k1q5pj4q6dnj2rw... — valid"
     },
     {
-      "time": 1772932103796,
+      "time": 1772934037353,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "  🔗 Issuer is a known, authenticated contact — TRUSTED"
     },
     {
-      "time": 1772932103796,
+      "time": 1772934037353,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "✅ Presentation fully verified. did:btcr2:k1q5paudj5njajd... is authorized."
+      "text": "✅ Presentation fully verified. did:btcr2:k1q5p4e9q3xyf9j... is authorized."
     },
     {
-      "time": 1772932103897,
+      "time": 1772934037454,
       "agent": "🏥 Triage Agent",
       "type": "thought",
       "text": "Both agents authenticated and authorized. Sending patient referral."
     },
     {
-      "time": 1772932103902,
+      "time": 1772934037458,
       "agent": "🏥 Triage Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "SignedMessage"
     },
     {
-      "time": 1772932103905,
+      "time": 1772934037462,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "📨 Message from did:btcr2:k1q5pwvgwlaf8d8...: {\"type\":\"ReferralRequest\",\"caseId\":\"CASE-4II1C\",\"patient\":\"Jane Doe (anonymized)\",\"priority\":\"RED — "
+      "text": "📨 Message from did:btcr2:k1q5prvrtshtaqn...: {\"type\":\"ReferralRequest\",\"caseId\":\"CASE-J85HG\",\"patient\":\"Jane Doe (anonymized)\",\"priority\":\"RED — "
     },
     {
-      "time": 1772932104005,
+      "time": 1772934037563,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "Referral verified from authorized triage agent. Processing admission."
     },
     {
-      "time": 1772932104010,
+      "time": 1772934037568,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5pwvgwlaf8d8p66lg54c6v9tdxkyhvwxys2zcgwr4jvptc2a30zw8q6uedxs",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5prvrtshtaqny9rkpxgxv4axmk7gwnln2lamlfgwdxtw7ycz5663zchmexzg",
       "msgType": "SignedMessage"
     },
     {
-      "time": 1772932104013,
+      "time": 1772934037571,
       "agent": "🏥 Triage Agent",
       "type": "thought",
-      "text": "📨 Message from did:btcr2:k1q5paudj5njajd...: {\"type\":\"ReferralAccepted\",\"caseId\":\"CASE-ACCEPTED\",\"assignedBed\":\"NICU-7\",\"estimatedArrival\":\"15 mi"
+      "text": "📨 Message from did:btcr2:k1q5p4e9q3xyf9j...: {\"type\":\"ReferralAccepted\",\"caseId\":\"CASE-ACCEPTED\",\"assignedBed\":\"NICU-7\",\"estimatedArrival\":\"15 mi"
     },
     {
-      "time": 1772932104014,
+      "time": 1772934037572,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
       "text": "Sending a fake referral to the Referral Agent..."
     },
     {
-      "time": 1772932104018,
+      "time": 1772934037576,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "SignedMessage"
     },
     {
-      "time": 1772932104019,
+      "time": 1772934037576,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Unknown sender did:btcr2:k1q5p7yhd4j2mw8... Demanding authentication."
+      "text": "Unknown sender did:btcr2:k1q5pgwvycsjl3r... Demanding authentication."
     },
     {
-      "time": 1772932104019,
+      "time": 1772934037576,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932104019,
+      "time": 1772934037576,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5paudj5njajd... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5p4e9q3xyf9j... Signing response."
     },
     {
-      "time": 1772932104023,
+      "time": 1772934037580,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932104023,
+      "time": 1772934037580,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
       "text": "I don't know them either. Sending mutual auth challenge."
     },
     {
-      "time": 1772932104023,
+      "time": 1772934037581,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932104023,
+      "time": 1772934037581,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5p7yhd4j2mw8... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5pgwvycsjl3r... Verifying."
     },
     {
-      "time": 1772932104026,
+      "time": 1772934037584,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5p7yhd4j2mw8... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5pgwvycsjl3r... — signature valid."
     },
     {
-      "time": 1772932104026,
+      "time": 1772934037584,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932104027,
+      "time": 1772934037584,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5p7yhd4j2mw8... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5pgwvycsjl3r... Signing response."
     },
     {
-      "time": 1772932104031,
+      "time": 1772934037588,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932104031,
+      "time": 1772934037588,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "Unknown sender did:btcr2:k1q5paudj5njajd... Demanding authentication."
+      "text": "Unknown sender did:btcr2:k1q5p4e9q3xyf9j... Demanding authentication."
     },
     {
-      "time": 1772932104031,
+      "time": 1772934037588,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthChallenge"
     },
     {
-      "time": 1772932104031,
+      "time": 1772934037588,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5paudj5njajd... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5p4e9q3xyf9j... Verifying."
     },
     {
-      "time": 1772932104034,
+      "time": 1772934037591,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5paudj5njajd... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5p4e9q3xyf9j... — signature valid."
     },
     {
-      "time": 1772932104034,
+      "time": 1772934037592,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932104034,
+      "time": 1772934037592,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received auth challenge from did:btcr2:k1q5p7yhd4j2mw8... Signing response."
+      "text": "Received auth challenge from did:btcr2:k1q5pgwvycsjl3r... Signing response."
     },
     {
-      "time": 1772932104038,
+      "time": 1772934037596,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "msgType": "DIDAuthResponse"
     },
     {
-      "time": 1772932104038,
+      "time": 1772934037596,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "did:btcr2:k1q5p7yhd4j2mw8... confirmed our authentication."
+      "text": "did:btcr2:k1q5pgwvycsjl3r... confirmed our authentication."
     },
     {
-      "time": 1772932104038,
+      "time": 1772934037596,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "Received auth response from did:btcr2:k1q5paudj5njajd... Verifying."
+      "text": "Received auth response from did:btcr2:k1q5p4e9q3xyf9j... Verifying."
     },
     {
-      "time": 1772932104041,
+      "time": 1772934037599,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "✅ Authenticated did:btcr2:k1q5paudj5njajd... — signature valid."
+      "text": "✅ Authenticated did:btcr2:k1q5p4e9q3xyf9j... — signature valid."
     },
     {
-      "time": 1772932104041,
+      "time": 1772934037599,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": "DIDAuthConfirmed"
     },
     {
-      "time": 1772932104041,
+      "time": 1772934037599,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "did:btcr2:k1q5p7yhd4j2mw8... confirmed our authentication."
+      "text": "did:btcr2:k1q5pgwvycsjl3r... confirmed our authentication."
     },
     {
-      "time": 1772932104142,
+      "time": 1772934037700,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "New agent authenticated. But do they have authorization? Checking credentials."
     },
     {
-      "time": 1772932104142,
+      "time": 1772934037700,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5p7yhd4j2mw8..."
+      "text": "Requesting AgentAuthorization credentials from did:btcr2:k1q5pgwvycsjl3r..."
     },
     {
-      "time": 1772932104142,
+      "time": 1772934037700,
       "agent": "📋 Referral Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
-      "to": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
+      "from": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
+      "to": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
       "msgType": "PresentationRequest"
     },
     {
-      "time": 1772932104142,
+      "time": 1772934037700,
       "agent": "🦹 Rogue Agent",
       "type": "thought",
-      "text": "Presenting 0 credential(s) to did:btcr2:k1q5paudj5njajd..."
+      "text": "Presenting 0 credential(s) to did:btcr2:k1q5p4e9q3xyf9j..."
     },
     {
-      "time": 1772932104147,
+      "time": 1772934037705,
       "agent": "🦹 Rogue Agent",
       "type": "send",
-      "from": "did:btcr2:k1q5p7yhd4j2mw8u7pa4zpnff5d4nuucd5y72ttqwaj5y8t0848zl93nscjk4lv",
-      "to": "did:btcr2:k1q5paudj5njajdp8ztnrvklta55fztw0lhl7ytt65dhy885quj936dkcsspfj5",
+      "from": "did:btcr2:k1q5pgwvycsjl3rkcrsgeava5tgn2egl07873jurhmdgz24htgh4tzzsqewtjq9",
+      "to": "did:btcr2:k1q5p4e9q3xyf9jgdmtn44nflpjajhhr6rj9cs0m5u2ngrv38pfzqxnrghhgndq",
       "msgType": [
         "VerifiablePresentation"
       ]
     },
     {
-      "time": 1772932104147,
+      "time": 1772934037705,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "Received presentation from did:btcr2:k1q5p7yhd4j2mw8... Verifying."
+      "text": "Received presentation from did:btcr2:k1q5pgwvycsjl3r... Verifying."
     },
     {
-      "time": 1772932104150,
+      "time": 1772934037708,
       "agent": "📋 Referral Agent",
       "type": "thought",
-      "text": "⚠️ Empty presentation — did:btcr2:k1q5p7yhd4j2mw8... holds NO credentials. Cannot authorize."
+      "text": "⚠️ Empty presentation — did:btcr2:k1q5pgwvycsjl3r... holds NO credentials. Cannot authorize."
     },
     {
-      "time": 1772932104251,
+      "time": 1772934037808,
       "agent": "📋 Referral Agent",
       "type": "thought",
       "text": "🚫 DECISION: Agent is cryptographically real but holds no credentials from our trust root. Referral DENIED."
