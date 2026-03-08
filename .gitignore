@@ -13,3 +13,5 @@ wallet/
 tools/
 trace.json
 *.log
+.env
+
