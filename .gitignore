@@ -1,0 +1,14 @@
+node_modules/
+.openclaw/
+AGENTS.md
+BOOTSTRAP.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+memory/
+keys/
+wallet/
+trace.json
+*.log
