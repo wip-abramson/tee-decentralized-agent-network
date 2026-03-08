@@ -180,6 +180,30 @@ async function runDemo() {
   referral.think('Rogue agent has 0 valid credentials from our trust root. REJECTED.');
   await delay(500);
 
+  // Phase 8: Replay Attack
+  phase('8', 'Replay attack detection — nonce reuse blocked');
+  await delay(500);
+
+  rogue.think('What if I replay a captured auth response? Trying nonce reuse...');
+  await delay(400);
+
+  // Simulate replay: rogue sends an auth response with an already-consumed nonce
+  const consumedNonce = [...root.usedNonces][0];
+  if (consumedNonce) {
+    rogue.think('Replaying auth response with previously-consumed nonce...');
+    const fakeReplay = {
+      type: 'DIDAuthResponse',
+      did: triage.did,
+      challenge: { nonce: consumedNonce }
+    };
+    rogue.send(root.did, fakeReplay);
+    await net.run();
+    await delay(600);
+
+    root.think('🛡️ Replay attack foiled. Nonce was already consumed — one-time use enforced.');
+  }
+  await delay(500);
+
   // Done
   phase('done', 'Demo complete');
   broadcast({
@@ -191,7 +215,8 @@ async function runDemo() {
     stats: {
       totalMessages: net.logs.filter(e => e.type === 'send').length,
       totalThoughts: net.logs.filter(e => e.type === 'thought').length,
-      credentialsIssued: 2, presentationsVerified: 2, rogueBlocked: 1
+      credentialsIssued: 2, presentationsVerified: 2, rogueBlocked: 1,
+      replayBlocked: net.logs.filter(e => e.type === 'send' && e.msgType === 'DIDAuthRejected').length
     }
   });
 

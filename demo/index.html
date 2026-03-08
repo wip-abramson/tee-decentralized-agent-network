@@ -339,7 +339,7 @@ function classifyMessage(msgType) {
   if (t.includes('Auth') || t.includes('auth')) return 'auth';
   if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation') || t.includes('presentation')) return 'vc';
   if (t.includes('Signed') || t.includes('Referral') || t.includes('Accepted')) return 'msg';
-  if (t.includes('reject') || t.includes('REJECT')) return 'reject';
+  if (t.includes('Rejected') || t.includes('reject') || t.includes('REJECT')) return 'reject';
   return 'auth';
 }
 
@@ -377,7 +377,8 @@ function tagFor(text) {
   if (t.includes('Auth') || t.includes('auth')) return '<span class="tag tag-auth">AUTH</span>';
   if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation')) return '<span class="tag tag-vc">VC</span>';
   if (t.includes('Signed') || t.includes('Referral')) return '<span class="tag tag-msg">MSG</span>';
-  if (t.includes('❌') || t.includes('Rogue') || t.includes('REJECTED')) return '<span class="tag tag-reject">REJECT</span>';
+  if (t.includes('Rejected') || t.includes('rejected')) return '<span class="tag tag-reject">REJECT</span>';
+  if (t.includes('❌') || t.includes('Rogue') || t.includes('REJECTED') || t.includes('REPLAY') || t.includes('replay')) return '<span class="tag tag-reject">REJECT</span>';
   return '';
 }
 
@@ -427,6 +428,7 @@ function renderSummary(ev) {
       <div class="stat"><div class="label">Reasoning Steps</div><div class="value">${ev.stats.totalThoughts}</div></div>
       <div class="stat"><div class="label">Credentials Issued</div><div class="value">${ev.stats.credentialsIssued}</div></div>
       <div class="stat"><div class="label">Rogue Attempts Blocked</div><div class="value" style="color: var(--red);">${ev.stats.rogueBlocked}</div></div>
+      <div class="stat"><div class="label">Replay Attacks Detected</div><div class="value" style="color: var(--orange);">${ev.stats.replayBlocked || 0}</div></div>
     </div>
     <div style="margin-top: 16px; color: var(--dim); font-size: 11px; line-height: 1.6;">
       ✓ did:btcr2 on mutinynet (offline, no Bitcoin tx)<br>
@@ -434,6 +436,7 @@ function renderSummary(ev) {
       ✓ W3C Data Integrity proofs<br>
       ✓ W3C Verifiable Credentials & Presentations<br>
       ✓ DID Auth challenge-response protocol<br>
+      ✓ Nonce-based replay attack protection<br>
       ✓ Trust chain: Root → Agent credentials → Peer verification
     </div>
     <button class="btn close-btn" onclick="document.getElementById('summary-overlay').classList.remove('visible')">Close</button>

@@ -14,6 +14,7 @@ export class Agent {
     this.contacts = new Map();        // did → { authenticated, credentials }
     this.credentials = [];             // VCs issued to us
     this.pendingChallenges = new Map(); // nonce → { did, timestamp }
+    this.usedNonces = new Set();        // consumed nonces (replay protection)
     this.log = [];
     this.messageQueue = [];
     this.network = null;               // reference to the network bus
@@ -93,6 +94,8 @@ export class Agent {
       await this.handleAuthResponse(fromDid, msg);
     } else if (type === 'DIDAuthConfirmed') {
       this.think(`${fromDid.slice(0, 25)}... confirmed our authentication.`);
+    } else if (type === 'DIDAuthRejected') {
+      this.think(`❌ Authentication rejected by ${fromDid.slice(0, 25)}... — reason: ${msg.reason}`);
     } else if (type === 'PresentationRequest') {
       await this.handlePresentationRequest(fromDid, msg);
     } else if (type === 'SignedMessage') {
@@ -152,12 +155,33 @@ export class Agent {
     const responderDid = response.did;
     this.think(`Received auth response from ${responderDid.slice(0, 25)}... Verifying.`);
 
+    // Extract the nonce from the nested challenge
+    const nonce = response.challenge?.nonce;
+
+    // Check for replay: nonce must exist in pendingChallenges and not be already used
+    if (nonce && this.usedNonces.has(nonce)) {
+      this.think(`🔁❌ REPLAY ATTACK DETECTED! Nonce already consumed. Rejecting.`);
+      this.send(fromDid, { type: 'DIDAuthRejected', did: this.did, reason: 'replay-detected', detail: 'Nonce has already been used' });
+      return;
+    }
+
+    if (nonce && !this.pendingChallenges.has(nonce)) {
+      this.think(`❌ Unknown nonce — not a response to any challenge I issued. Rejecting.`);
+      this.send(fromDid, { type: 'DIDAuthRejected', did: this.did, reason: 'unknown-nonce' });
+      return;
+    }
+
     // Verify signature
     const result = this.verifyFrom(responderDid, response, 'authentication');
 
     if (result.verified) {
+      // Consume the nonce — cannot be reused
+      if (nonce) {
+        this.pendingChallenges.delete(nonce);
+        this.usedNonces.add(nonce);
+      }
       this.contacts.set(responderDid, { authenticated: true, authenticatedAt: new Date().toISOString(), credentials: [] });
-      this.think(`✅ Authenticated ${responderDid.slice(0, 25)}... — signature valid.`);
+      this.think(`✅ Authenticated ${responderDid.slice(0, 25)}... — signature valid, nonce consumed.`);
       this.send(responderDid, { type: 'DIDAuthConfirmed', did: this.did, authenticated: responderDid, status: 'verified' });
     } else {
       this.think(`❌ Authentication FAILED for ${responderDid.slice(0, 25)}... — bad signature!`);
