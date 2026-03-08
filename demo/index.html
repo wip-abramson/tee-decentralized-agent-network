@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trustworthy Multi-Agent AI — Trust Protocol Demo</title>
+<style>
+  :root {
+    --bg: #0a0e17; --surface: #111827; --surface2: #1e293b;
+    --border: #334155; --text: #e2e8f0; --dim: #64748b;
+    --cyan: #22d3ee; --green: #4ade80; --yellow: #fbbf24;
+    --red: #f87171; --purple: #a78bfa; --blue: #60a5fa;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; min-height: 100vh; }
+
+  header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header h1 span { color: var(--cyan); }
+  header .sub { color: var(--dim); font-size: 12px; }
+
+  .layout { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 70px); }
+
+  .sidebar { border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; }
+  .sidebar h2 { font-size: 13px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+  .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; transition: border-color 0.3s; }
+  .agent-card.active { border-color: var(--cyan); box-shadow: 0 0 12px rgba(34,211,238,0.1); }
+  .agent-card.rogue { border-color: var(--red); }
+  .agent-card .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .agent-card .role { color: var(--dim); font-size: 11px; margin-bottom: 6px; }
+  .agent-card .did { color: var(--blue); font-size: 10px; word-break: break-all; opacity: 0.7; }
+  .agent-card .stats { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; }
+  .agent-card .stats span { color: var(--green); }
+
+  /* Network graph */
+  .network-graph { width: 100%; aspect-ratio: 1; position: relative; }
+  .network-graph svg { width: 100%; height: 100%; }
+  .graph-node { cursor: default; }
+  .graph-node circle.node-bg { fill: var(--surface); stroke: var(--border); stroke-width: 2; transition: stroke 0.3s, filter 0.3s; }
+  .graph-node.authenticated circle.node-bg { stroke: var(--green); }
+  .graph-node.active-pulse circle.node-bg { stroke: var(--cyan); filter: drop-shadow(0 0 8px rgba(34,211,238,0.4)); }
+  .graph-node.rogue circle.node-bg { stroke: var(--red); }
+  .graph-node text.node-emoji { font-size: 20px; text-anchor: middle; dominant-baseline: central; }
+  .graph-node text.node-label { fill: var(--text); font-size: 9px; text-anchor: middle; font-family: inherit; }
+  .graph-edge { stroke: var(--border); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.3; transition: stroke 0.5s, opacity 0.5s; }
+  .graph-edge.auth { stroke: var(--green); stroke-dasharray: none; opacity: 0.6; }
+  .graph-edge.rejected { stroke: var(--red); stroke-dasharray: 2 4; opacity: 0.5; }
+
+  @keyframes particleMove {
+    0% { offset-distance: 0%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+  .msg-particle {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    animation: particleMove 0.8s ease-in-out forwards;
+    pointer-events: none;
+  }
+  .msg-particle.auth { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .msg-particle.vc { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .msg-particle.msg { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .msg-particle.reject { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+  .graph-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; font-size: 10px; color: var(--dim); }
+  .graph-legend .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 3px; vertical-align: middle; }
+
+  .main { display: flex; flex-direction: column; }
+
+  .phase-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .phase-bar .phase-num { background: var(--cyan); color: var(--bg); font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .phase-bar .phase-text { font-weight: 600; }
+
+  .log-area { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .log-entry { padding: 3px 0; display: flex; gap: 10px; animation: fadeIn 0.2s ease-out; }
+  .log-entry .time { color: var(--dim); min-width: 70px; }
+  .log-entry .agent-name { min-width: 140px; font-weight: 600; }
+  .log-entry.thought .agent-name { color: var(--cyan); }
+  .log-entry.send .agent-name { color: var(--green); }
+  .log-entry .content { flex: 1; }
+  .log-entry.send .content { color: var(--green); }
+
+  .log-entry .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+  .tag-auth { background: rgba(34,211,238,0.15); color: var(--cyan); }
+  .tag-vc { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .tag-msg { background: rgba(74,222,128,0.15); color: var(--green); }
+  .tag-reject { background: rgba(248,113,113,0.15); color: var(--red); }
+
+  .phase-divider { padding: 12px 0; margin: 8px 0; border-top: 1px solid var(--border); }
+  .phase-divider span { color: var(--yellow); font-weight: 600; }
+
+  .controls { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 12px; align-items: center; }
+  .btn { background: var(--cyan); color: var(--bg); border: none; padding: 8px 20px; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-reset { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .status { color: var(--dim); font-size: 12px; }
+
+  .summary-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; display: none; }
+  .summary-overlay.visible { display: flex; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; }
+  .summary-card h2 { font-size: 16px; margin-bottom: 16px; }
+  .summary-card .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .summary-card .stat { background: var(--surface2); padding: 10px; border-radius: 6px; }
+  .summary-card .stat .label { color: var(--dim); font-size: 11px; }
+  .summary-card .stat .value { font-size: 20px; font-weight: 700; color: var(--cyan); }
+  .summary-card .close-btn { margin-top: 16px; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏥 <span>Trustworthy Multi-Agent AI</span></h1>
+  <div class="sub">did:btcr2 · BIP-340 Schnorr · W3C Data Integrity · Verifiable Credentials</div>
+</header>
+
+<div class="layout">
+  <div class="sidebar">
+    <h2>Agents</h2>
+    <div id="agents"></div>
+
+    <h2 style="margin-top: 20px;">Network Graph</h2>
+    <div class="network-graph" id="network-graph">
+      <svg id="graph-svg" viewBox="0 0 260 260"></svg>
+    </div>
+    <div class="graph-legend">
+      <span><span class="dot" style="background:var(--cyan)"></span>Auth</span>
+      <span><span class="dot" style="background:var(--purple)"></span>Credential</span>
+      <span><span class="dot" style="background:var(--green)"></span>Message</span>
+      <span><span class="dot" style="background:var(--red)"></span>Rejected</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="phase-bar">
+      <div class="phase-num" id="phase-num">-</div>
+      <div class="phase-text" id="phase-text">Ready to start</div>
+    </div>
+
+    <div class="log-area" id="log-area"></div>
+
+    <div class="controls">
+      <button class="btn" id="run-btn" onclick="startDemo()">▶ Run Demo</button>
+      <button class="btn btn-reset" onclick="resetDemo()">↻ Reset</button>
+      <span class="status" id="status">Click "Run Demo" to begin</span>
+    </div>
+  </div>
+</div>
+
+<div class="summary-overlay" id="summary-overlay">
+  <div class="summary-card" id="summary-card"></div>
+</div>
+
+<script>
+const agentsEl = document.getElementById('agents');
+const logArea = document.getElementById('log-area');
+const phaseNum = document.getElementById('phase-num');
+const phaseText = document.getElementById('phase-text');
+const statusEl = document.getElementById('status');
+const runBtn = document.getElementById('run-btn');
+const graphSvg = document.getElementById('graph-svg');
+const graphContainer = document.getElementById('network-graph');
+
+let evtSource = null;
+const agents = new Map();
+const graphNodes = new Map(); // did → {x, y, emoji, name}
+const graphEdges = new Map(); // "did1→did2" → {state}
+let nodeCount = 0;
+
+// Node positions: triangle layout for 3 main agents, offset for rogue
+const NODE_POSITIONS = [
+  { x: 130, y: 45 },   // top center (Root)
+  { x: 50, y: 195 },   // bottom left (Triage)
+  { x: 210, y: 195 },  // bottom right (Referral)
+  { x: 210, y: 45 },   // top right (Rogue)
+];
+
+function truncDid(did) { return did ? did.slice(0, 20) + '...' + did.slice(-6) : ''; }
+
+function startDemo() {
+  runBtn.disabled = true;
+  statusEl.textContent = 'Starting...';
+  fetch('/run', { method: 'POST' }).then(r => r.json()).then(d => {
+    statusEl.textContent = d.status === 'started' ? 'Running...' : d.error;
+  });
+  connectSSE();
+}
+
+function resetDemo() {
+  if (evtSource) evtSource.close();
+  logArea.innerHTML = '';
+  agentsEl.innerHTML = '';
+  agents.clear();
+  graphNodes.clear();
+  graphEdges.clear();
+  nodeCount = 0;
+  graphSvg.innerHTML = '';
+  phaseNum.textContent = '-';
+  phaseText.textContent = 'Ready to start';
+  statusEl.textContent = 'Click "Run Demo" to begin';
+  runBtn.disabled = false;
+  document.getElementById('summary-overlay').classList.remove('visible');
+}
+
+function connectSSE() {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource('/events');
+  evtSource.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    handleEvent(data);
+  };
+}
+
+function handleEvent(ev) {
+  if (ev.type === 'phase') {
+    if (ev.name === 'done') {
+      phaseNum.textContent = '✓';
+      phaseText.textContent = 'Demo complete';
+      statusEl.textContent = 'Complete';
+      runBtn.disabled = false;
+      return;
+    }
+    phaseNum.textContent = ev.name;
+    phaseText.textContent = ev.description;
+    const div = document.createElement('div');
+    div.className = 'phase-divider';
+    div.innerHTML = `<span>▸ PHASE ${ev.name}: ${ev.description}</span>`;
+    logArea.appendChild(div);
+    logArea.scrollTop = logArea.scrollHeight;
+    return;
+  }
+
+  if (ev.type === 'agent') {
+    agents.set(ev.did, ev);
+    addGraphNode(ev.did, ev.name, ev.emoji);
+    renderAgents();
+    return;
+  }
+
+  if (ev.type === 'summary') {
+    renderSummary(ev);
+    return;
+  }
+
+  if (ev.type === 'thought' || ev.type === 'send') {
+    renderLog(ev);
+
+    // Animate graph on sends
+    if (ev.type === 'send' && ev.from && ev.to) {
+      const msgClass = classifyMessage(ev.msgType);
+      // Ensure edge exists
+      ensureEdge(ev.from, ev.to, '');
+      // If it's an auth confirmation, upgrade edge
+      if (String(ev.msgType).includes('Confirmed')) {
+        ensureEdge(ev.from, ev.to, 'auth');
+      }
+      renderGraph();
+      animateParticle(ev.from, ev.to, msgClass);
+
+      // Pulse the sending node
+      const gnode = document.getElementById(`gnode-${ev.from?.slice(10,20)}`);
+      if (gnode) {
+        gnode.classList.add('active-pulse');
+        setTimeout(() => gnode.classList.remove('active-pulse'), 500);
+      }
+    }
+  }
+}
+
+function renderAgents() {
+  agentsEl.innerHTML = '';
+  for (const [did, a] of agents) {
+    const card = document.createElement('div');
+    card.className = `agent-card${a.rogue ? ' rogue' : ''}`;
+    card.id = `agent-${did.slice(10, 20)}`;
+    card.innerHTML = `
+      <div class="name">${a.emoji} ${a.name}</div>
+      <div class="role">${a.role}</div>
+      <div class="did">${truncDid(did)}</div>
+    `;
+    agentsEl.appendChild(card);
+  }
+  renderGraph();
+}
+
+// === NETWORK GRAPH ===
+function renderGraph() {
+  // Build SVG content
+  let svg = '';
+
+  // Draw edges first (behind nodes)
+  for (const [key, edge] of graphEdges) {
+    const [fromDid, toDid] = key.split('→');
+    const from = graphNodes.get(fromDid);
+    const to = graphNodes.get(toDid);
+    if (!from || !to) continue;
+    svg += `<line class="graph-edge ${edge.state}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" id="edge-${key.replace('→','-')}"/>`;
+  }
+
+  // Draw nodes
+  for (const [did, node] of graphNodes) {
+    const isRogue = agents.get(did)?.rogue;
+    const cls = isRogue ? 'rogue' : (node.authenticated ? 'authenticated' : '');
+    svg += `<g class="graph-node ${cls}" id="gnode-${did.slice(10,20)}">`;
+    svg += `<circle class="node-bg" cx="${node.x}" cy="${node.y}" r="24"/>`;
+    svg += `<text class="node-emoji" x="${node.x}" y="${node.y}">${node.emoji}</text>`;
+    svg += `<text class="node-label" x="${node.x}" y="${node.y + 36}">${node.name.replace(/^(Root|Triage|Referral|Rogue)\s.*/, '$1')}</text>`;
+    svg += `</g>`;
+  }
+
+  graphSvg.innerHTML = svg;
+}
+
+function addGraphNode(did, name, emoji) {
+  if (graphNodes.has(did)) return;
+  const pos = NODE_POSITIONS[nodeCount % NODE_POSITIONS.length];
+  graphNodes.set(did, { x: pos.x, y: pos.y, emoji, name, authenticated: false });
+  nodeCount++;
+}
+
+function edgeKey(did1, did2) {
+  return [did1, did2].sort().join('→');
+}
+
+function ensureEdge(did1, did2, state) {
+  const key = edgeKey(did1, did2);
+  const existing = graphEdges.get(key);
+  // Only upgrade state: none → auth → rejected
+  if (!existing || state === 'auth' || (state === 'rejected' && existing.state !== 'auth')) {
+    graphEdges.set(key, { state: state || '' });
+  }
+}
+
+function classifyMessage(msgType) {
+  const t = String(msgType || '');
+  if (t.includes('Auth') || t.includes('auth')) return 'auth';
+  if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation') || t.includes('presentation')) return 'vc';
+  if (t.includes('Signed') || t.includes('Referral') || t.includes('Accepted')) return 'msg';
+  if (t.includes('reject') || t.includes('REJECT')) return 'reject';
+  return 'auth';
+}
+
+function animateParticle(fromDid, toDid, type) {
+  const from = graphNodes.get(fromDid);
+  const to = graphNodes.get(toDid);
+  if (!from || !to) return;
+
+  // Get SVG's bounding rect to convert coordinates
+  const rect = graphContainer.getBoundingClientRect();
+  const svgRect = graphSvg.getBoundingClientRect();
+  const scaleX = svgRect.width / 260;
+  const scaleY = svgRect.height / 260;
+
+  const particle = document.createElement('div');
+  particle.className = `msg-particle ${type}`;
+
+  // Use CSS offset-path for smooth motion along a line
+  const x1 = from.x * scaleX;
+  const y1 = from.y * scaleY;
+  const x2 = to.x * scaleX;
+  const y2 = to.y * scaleY;
+
+  particle.style.offsetPath = `path('M ${x1} ${y1} L ${x2} ${y2}')`;
+  particle.style.left = '0';
+  particle.style.top = '0';
+
+  graphContainer.appendChild(particle);
+  setTimeout(() => particle.remove(), 850);
+}
+
+function tagFor(text) {
+  if (!text) return '';
+  const t = String(text);
+  if (t.includes('Auth') || t.includes('auth')) return '<span class="tag tag-auth">AUTH</span>';
+  if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation')) return '<span class="tag tag-vc">VC</span>';
+  if (t.includes('Signed') || t.includes('Referral')) return '<span class="tag tag-msg">MSG</span>';
+  if (t.includes('❌') || t.includes('Rogue') || t.includes('REJECTED')) return '<span class="tag tag-reject">REJECT</span>';
+  return '';
+}
+
+function renderLog(ev) {
+  const div = document.createElement('div');
+  div.className = `log-entry ${ev.type}`;
+  const time = new Date(ev.time).toISOString().split('T')[1].split('.')[0];
+  const name = ev.agent || '';
+
+  if (ev.type === 'thought') {
+    div.innerHTML = `
+      <span class="time">${time}</span>
+      <span class="agent-name">${name}</span>
+      <span class="content">${tagFor(ev.text)}💭 ${escHtml(ev.text)}</span>
+    `;
+  } else if (ev.type === 'send') {
+    const toAgent = [...agents.entries()].find(([d]) => ev.to?.startsWith(d?.slice(0, 15)));
+    const toName = toAgent ? toAgent[1].name : truncDid(ev.to);
+    div.innerHTML = `
+      <span class="time">${time}</span>
+      <span class="agent-name">${name}</span>
+      <span class="content">${tagFor(ev.msgType)}📤 → ${toName} <span style="color:var(--dim)">[${ev.msgType}]</span></span>
+    `;
+  }
+
+  logArea.appendChild(div);
+  logArea.scrollTop = logArea.scrollHeight;
+
+  // Flash the agent card
+  const agentInfo = [...agents.entries()].find(([d, a]) => a.name === name);
+  if (agentInfo) {
+    const card = document.getElementById(`agent-${agentInfo[0].slice(10, 20)}`);
+    if (card) {
+      card.classList.add('active');
+      setTimeout(() => card.classList.remove('active'), 400);
+    }
+  }
+}
+
+function renderSummary(ev) {
+  const card = document.getElementById('summary-card');
+  card.innerHTML = `
+    <h2>📊 Demo Complete</h2>
+    <p style="color: var(--dim); margin-bottom: 12px;">All interactions cryptographically verified</p>
+    <div class="stat-grid">
+      <div class="stat"><div class="label">Messages Exchanged</div><div class="value">${ev.stats.totalMessages}</div></div>
+      <div class="stat"><div class="label">Reasoning Steps</div><div class="value">${ev.stats.totalThoughts}</div></div>
+      <div class="stat"><div class="label">Credentials Issued</div><div class="value">${ev.stats.credentialsIssued}</div></div>
+      <div class="stat"><div class="label">Rogue Attempts Blocked</div><div class="value" style="color: var(--red);">${ev.stats.rogueBlocked}</div></div>
+    </div>
+    <div style="margin-top: 16px; color: var(--dim); font-size: 11px; line-height: 1.6;">
+      ✓ did:btcr2 on mutinynet (offline, no Bitcoin tx)<br>
+      ✓ BIP-340 Schnorr signatures (bip340-jcs-2025)<br>
+      ✓ W3C Data Integrity proofs<br>
+      ✓ W3C Verifiable Credentials & Presentations<br>
+      ✓ DID Auth challenge-response protocol<br>
+      ✓ Trust chain: Root → Agent credentials → Peer verification
+    </div>
+    <button class="btn close-btn" onclick="document.getElementById('summary-overlay').classList.remove('visible')">Close</button>
+  `;
+  document.getElementById('summary-overlay').classList.add('visible');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+</script>
+</body>
+</html>
