@@ -1,0 +1,14 @@
+{
+  "did": "did:ion:Eiadmissions2026",
+  "pubJWK": {
+    "crv": "Ed25519",
+    "x": "fp2H8bG5KjRBFfEH3FAUtp4sQEFq5zLe-zL0jpU3IRU",
+    "kty": "OKP"
+  },
+  "privJWK": {
+    "crv": "Ed25519",
+    "d": "NcAeqdibuPn_nTyE0EEUTS4HgRbbbsYX5o_PgWKV3LA",
+    "x": "fp2H8bG5KjRBFfEH3FAUtp4sQEFq5zLe-zL0jpU3IRU",
+    "kty": "OKP"
+  }
+}

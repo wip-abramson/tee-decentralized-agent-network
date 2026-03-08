@@ -1,0 +1,119 @@
+{
+  "sentinel": {
+    "did": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3",
+    "secretKeyHex": "418eee8a2ea122b850a618a4e37a4ad4042aadd563126e2c613a150ec0927d63",
+    "publicKeyHex": "03620dc509e4a8a8b92fb228d804b639068de7daeedce335b8043870898afa8b07",
+    "publicKeyMultibase": "zQ3shmEsG1mEhrGrfei6Unnq9211Ju3c6BNdGmRHpGvXPGa6A",
+    "didDocument": {
+      "id": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3",
+      "controller": [
+        "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3"
+      ],
+      "@context": [
+        "https://www.w3.org/TR/did-1.1",
+        "https://btcr2.dev/context/v1"
+      ],
+      "verificationMethod": [
+        {
+          "id": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey",
+          "type": "Multikey",
+          "controller": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3",
+          "publicKeyMultibase": {
+            "prefix": {
+              "0": 231,
+              "1": 1
+            },
+            "key": [
+              231,
+              1,
+              3,
+              98,
+              13,
+              197,
+              9,
+              228,
+              168,
+              168,
+              185,
+              47,
+              178,
+              40,
+              216,
+              4,
+              182,
+              57,
+              6,
+              141,
+              231,
+              218,
+              238,
+              220,
+              227,
+              53,
+              184,
+              4,
+              56,
+              112,
+              137,
+              138,
+              250,
+              139,
+              7
+            ],
+            "encoded": "zQ3shmEsG1mEhrGrfei6Unnq9211Ju3c6BNdGmRHpGvXPGa6A"
+          }
+        }
+      ],
+      "authentication": [
+        "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey"
+      ],
+      "assertionMethod": [
+        "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey"
+      ],
+      "capabilityInvocation": [
+        "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey"
+      ],
+      "capabilityDelegation": [
+        "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey"
+      ],
+      "service": [
+        {
+          "id": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#beacon-0",
+          "type": "SingletonBeacon",
+          "serviceEndpoint": "bitcoin:tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx"
+        }
+      ]
+    }
+  },
+  "vc": {
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://btcr2.dev/context/v1"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "TrustchainEndorsement"
+    ],
+    "issuer": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3",
+    "issuanceDate": "2026-03-07T23:10:40.313Z",
+    "credentialSubject": {
+      "id": "did:btcr2:k1q5pu0xuvnn305c2y7t7vvg0x7r6kxv4chr7hnae7jxvmanlu2wmkjsclykj87",
+      "endorsement": {
+        "type": "TrustedParticipant",
+        "role": "Hackathon Team Lead",
+        "network": "Trustworthy Multi-Agent Healthcare Network",
+        "endorsedBy": "Sentinel (Trust & Provenance Agent)",
+        "trustLevel": "high"
+      }
+    },
+    "proof": {
+      "type": "DataIntegrityProof",
+      "cryptosuite": "bip340-2025",
+      "verificationMethod": "did:btcr2:k1qqpkyrw9p8j2329e97ez3kqykcusdr08mthdece4hqzrsuyf3tagkpcqv54m3#initialKey",
+      "created": "2026-03-07T23:10:40.315Z",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "dc1bd0aa9507e21fadf799e868981b3c5456419c10213342b90eba980c7a568b8ec5a7315d19289baf957b3157eeaa8ef8e7be7bde5be5463fc951e2c62775cd"
+    }
+  },
+  "verified": true
+}

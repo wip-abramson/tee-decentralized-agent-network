@@ -1,0 +1,157 @@
+##############################################################################
+# Trustworthy Multi-Agent Healthcare Network
+# 
+# Architecture:
+#   - Each agent = its own OpenClaw instance with unique DID + keys
+#   - Shared message board API for signed message exchange
+#   - Dashboard for live visualization
+#   - Connects to host ION/Trustchain via extra_hosts
+#
+# Usage:
+#   docker compose up -d
+#   Open http://localhost:3456 for the dashboard
+#   
+# Pre-requisites:
+#   - ION running on host (port 3000)
+#   - Trustchain on host
+#   - Agent keys pre-generated (see setup instructions)
+##############################################################################
+
+services:
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # MESSAGE BOARD + DASHBOARD
+  # The coordination hub — agents post signed messages here
+  # ═══════════════════════════════════════════════════════════════════════
+  dashboard:
+    build:
+      context: ./services/dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3456:3456"
+    volumes:
+      - board-data:/app/data
+      - ./keys:/app/keys:ro
+    environment:
+      - PORT=3456
+      - REGISTRY_PATH=/app/keys/registry.json
+    networks:
+      - agent-net
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # AGENT: SENTINEL (Trust & Provenance)
+  # DID: did:ion:EiSentinel2026
+  # Role: Verifies signatures, maintains provenance ledger
+  # ═══════════════════════════════════════════════════════════════════════
+  sentinel:
+    image: ghcr.io/openclaw/openclaw:latest
+    volumes:
+      - ./agents/sentinel:/home/node/.openclaw
+      - ./keys:/home/node/.openclaw/workspace/keys:ro
+      - board-data:/home/node/.openclaw/workspace/board
+    environment:
+      - OPENCLAW_NAME=Sentinel
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent-net
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # AGENT: TRIAGE (Hospital A — Clinical Assessment)
+  # DID: did:ion:EiTriage2026
+  # Role: Receives patient cases, performs START triage, signs assessments
+  # ═══════════════════════════════════════════════════════════════════════
+  triage:
+    image: ghcr.io/openclaw/openclaw:latest
+    volumes:
+      - ./agents/triage:/home/node/.openclaw
+      - ./keys:/home/node/.openclaw/workspace/keys:ro
+      - board-data:/home/node/.openclaw/workspace/board
+    environment:
+      - OPENCLAW_NAME=TriageAgent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent-net
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # AGENT: BEDS (Hospital B — Resource Management)
+  # DID: did:ion:EiBeds2026
+  # Role: Monitors bed availability, publishes signed capacity reports
+  # ═══════════════════════════════════════════════════════════════════════
+  beds:
+    image: ghcr.io/openclaw/openclaw:latest
+    volumes:
+      - ./agents/beds:/home/node/.openclaw
+      - ./keys:/home/node/.openclaw/workspace/keys:ro
+      - board-data:/home/node/.openclaw/workspace/board
+    environment:
+      - OPENCLAW_NAME=BedAvailabilityAgent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent-net
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # AGENT: REFERRAL (Coordination — Cross-Facility Handoff)
+  # DID: did:ion:EiReferral2026
+  # Role: Reads triage + beds, creates signed referral requests
+  # ═══════════════════════════════════════════════════════════════════════
+  referral:
+    image: ghcr.io/openclaw/openclaw:latest
+    volumes:
+      - ./agents/referral:/home/node/.openclaw
+      - ./keys:/home/node/.openclaw/workspace/keys:ro
+      - board-data:/home/node/.openclaw/workspace/board
+    environment:
+      - OPENCLAW_NAME=ReferralAgent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent-net
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # AGENT: ADMISSIONS (Hospital B — Patient Acceptance)
+  # DID: did:ion:EiAdmissions2026
+  # Role: Verifies full chain, accepts/rejects referrals, assigns beds
+  # ═══════════════════════════════════════════════════════════════════════
+  admissions:
+    image: ghcr.io/openclaw/openclaw:latest
+    volumes:
+      - ./agents/admissions:/home/node/.openclaw
+      - ./keys:/home/node/.openclaw/workspace/keys:ro
+      - board-data:/home/node/.openclaw/workspace/board
+    environment:
+      - OPENCLAW_NAME=AdmissionsAgent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent-net
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+# ═══════════════════════════════════════════════════════════════════════
+# SHARED RESOURCES
+# ═══════════════════════════════════════════════════════════════════════
+
+volumes:
+  board-data:
+    driver: local
+
+networks:
+  agent-net:
+    driver: bridge

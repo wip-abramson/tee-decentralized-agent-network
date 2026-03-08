@@ -1,0 +1,14 @@
+{
+  "did": "did:ion:Eibeds2026",
+  "pubJWK": {
+    "crv": "Ed25519",
+    "x": "epjS9wrHSHnIZL9ONjwyYLZEVf5yNMhld1hQorxoqFg",
+    "kty": "OKP"
+  },
+  "privJWK": {
+    "crv": "Ed25519",
+    "d": "UMKlxeECe3oJ4ZdJbWcid_oqsyiJMGzFISjD3S9BYGs",
+    "x": "epjS9wrHSHnIZL9ONjwyYLZEVf5yNMhld1hQorxoqFg",
+    "kty": "OKP"
+  }
+}

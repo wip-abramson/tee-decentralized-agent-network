@@ -1,0 +1,14 @@
+{
+  "did": "did:ion:Eitriage2026",
+  "pubJWK": {
+    "crv": "Ed25519",
+    "x": "U6c_BsTTajJppCnX85z4Pl5yIj2706YTwt1_EFD7gTs",
+    "kty": "OKP"
+  },
+  "privJWK": {
+    "crv": "Ed25519",
+    "d": "M2cwakoVPkDg26Mbv4yC2Rh2jb8ZftzY4h233vdX1zM",
+    "x": "U6c_BsTTajJppCnX85z4Pl5yIj2706YTwt1_EFD7gTs",
+    "kty": "OKP"
+  }
+}

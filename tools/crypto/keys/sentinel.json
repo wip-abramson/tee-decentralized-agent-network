@@ -1,0 +1,14 @@
+{
+  "did": "did:ion:Eisentinel2026",
+  "pubJWK": {
+    "crv": "Ed25519",
+    "x": "lWaqqoti5T7d7jP-LugHDrUiI5mNVKm2sJlAcRC5-5k",
+    "kty": "OKP"
+  },
+  "privJWK": {
+    "crv": "Ed25519",
+    "d": "0ZUIOHN0MvQdu9ynDhpqC81ZcwNtY3WRvp5nygLC7Pg",
+    "x": "lWaqqoti5T7d7jP-LugHDrUiI5mNVKm2sJlAcRC5-5k",
+    "kty": "OKP"
+  }
+}

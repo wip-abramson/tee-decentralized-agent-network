@@ -1,0 +1,14 @@
+{
+  "did": "did:ion:Eihealth-authority2026",
+  "pubJWK": {
+    "crv": "Ed25519",
+    "x": "G9_uXAbCeX2FRsgp-sYzZp7fGsClvRA-7_F1qJqeMsY",
+    "kty": "OKP"
+  },
+  "privJWK": {
+    "crv": "Ed25519",
+    "d": "SPJUnDL3BMHsMZg0GfHlQkP85owiVzTpBGCqb3OGS-I",
+    "x": "G9_uXAbCeX2FRsgp-sYzZp7fGsClvRA-7_F1qJqeMsY",
+    "kty": "OKP"
+  }
+}

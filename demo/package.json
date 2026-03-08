@@ -1,0 +1,10 @@
+{
+  "name": "trustchain-multi-agent-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Multi-agent trust protocol demo using did:btcr2",
+  "scripts": {
+    "start": "node server.mjs",
+    "demo": "node orchestrator.mjs"
+  }
+}

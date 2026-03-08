@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trustchain Healthcare Network</title>
+<style>
+  :root {
+    --bg: #0a0e17; --surface: #131a2b; --border: #1e2a42;
+    --text: #e2e8f0; --muted: #64748b; --accent: #3b82f6;
+    --green: #22c55e; --yellow: #eab308; --red: #ef4444; --purple: #a855f7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  }
+  header h1 { font-size: 1.2rem; font-weight: 600; }
+  header h1 span { color: var(--accent); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 1px; background: var(--border); min-height: calc(100vh - 56px); }
+  .panel { background: var(--surface); padding: 1rem; overflow-y: auto; }
+  .panel-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; }
+
+  /* Agents panel */
+  .agent-card {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.75rem; margin-bottom: 0.5rem; cursor: pointer; transition: border-color 0.2s;
+  }
+  .agent-card:hover { border-color: var(--accent); }
+  .agent-card.active { border-color: var(--accent); box-shadow: 0 0 12px rgba(59,130,246,0.15); }
+  .agent-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .agent-role { font-size: 0.75rem; color: var(--muted); }
+  .agent-did { font-size: 0.65rem; color: var(--muted); opacity: 0.7; word-break: break-all; margin-top: 4px; }
+  .agent-stats { font-size: 0.7rem; color: var(--accent); margin-top: 4px; }
+
+  /* Message feed */
+  .feed { display: flex; flex-direction: column; gap: 0.5rem; }
+  .msg {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.75rem; animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .msg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .msg-agent { font-weight: 600; font-size: 0.85rem; }
+  .msg-time { font-size: 0.7rem; color: var(--muted); }
+  .msg-type {
+    display: inline-block; font-size: 0.65rem; padding: 2px 8px; border-radius: 99px;
+    background: rgba(59,130,246,0.15); color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .msg-type.triage { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .msg-type.beds { background: rgba(34,197,94,0.15); color: var(--green); }
+  .msg-type.referral { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .msg-type.admission { background: rgba(239,68,68,0.15); color: var(--red); }
+  .msg-payload { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .msg-payload pre { white-space: pre-wrap; word-break: break-word; }
+  .msg-sig { font-size: 0.65rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+  .verified { color: var(--green); }
+  .unverified { color: var(--muted); }
+
+  /* Stats panel */
+  .stat-block { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-top: 4px; }
+  .stat-value.green { color: var(--green); }
+
+  /* Chain view */
+  .chain-view { margin-top: 1rem; }
+  .chain-node {
+    position: relative; padding: 0.5rem 0.75rem; padding-left: 1.5rem;
+    border-left: 2px solid var(--border); margin-left: 0.5rem; font-size: 0.8rem;
+  }
+  .chain-node::before {
+    content: ''; position: absolute; left: -5px; top: 0.75rem;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  }
+  .chain-node .cn-agent { font-weight: 600; }
+  .chain-node .cn-type { color: var(--muted); font-size: 0.7rem; }
+
+  .empty { color: var(--muted); text-align: center; padding: 3rem 1rem; font-size: 0.85rem; }
+
+  /* Demo button */
+  .demo-btn {
+    position: fixed; bottom: 1rem; right: 1rem; background: var(--accent);
+    color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px;
+    cursor: pointer; font-family: inherit; font-size: 0.8rem; z-index: 100;
+  }
+  .demo-btn:hover { background: #2563eb; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="status-dot"></span>🏥 <span>Trustchain</span> Healthcare Network</h1>
+  <div style="font-size:0.75rem;color:var(--muted)">Multi-Agent Coordination Dashboard</div>
+</header>
+
+<div class="grid">
+  <!-- Agents Panel -->
+  <div class="panel" id="agents-panel">
+    <div class="panel-title">🤖 Agents</div>
+    <div id="agents-list"><div class="empty">No agents online yet</div></div>
+  </div>
+
+  <!-- Message Feed -->
+  <div class="panel">
+    <div class="panel-title">📨 Message Board</div>
+    <div id="feed" class="feed"><div class="empty">Waiting for agent messages...<br><br>Agents post signed messages here.<br>Click "Run Demo" to simulate a patient flow.</div></div>
+  </div>
+
+  <!-- Stats & Chain -->
+  <div class="panel">
+    <div class="panel-title">📊 Network Stats</div>
+    <div id="stats">
+      <div class="stat-block"><div class="stat-label">Total Messages</div><div class="stat-value" id="stat-total">0</div></div>
+      <div class="stat-block"><div class="stat-label">Active Agents</div><div class="stat-value green" id="stat-agents">0</div></div>
+      <div class="stat-block"><div class="stat-label">Verified Signatures</div><div class="stat-value" id="stat-verified">0</div></div>
+    </div>
+    <div class="panel-title" style="margin-top:1.5rem">🔗 Provenance Chain</div>
+    <div id="chain"><div class="empty" style="padding:1rem">Click a message to trace its chain</div></div>
+  </div>
+</div>
+
+<button class="demo-btn" onclick="runDemo()">▶ Run Demo</button>
+
+<script>
+const API = '';
+
+// --- Fetch & Render ---
+
+async function fetchMessages() {
+  try {
+    const res = await fetch(`${API}/api/messages?order=desc&limit=50`);
+    const msgs = await res.json();
+    renderFeed(msgs);
+  } catch(e) { console.error('fetch messages:', e); }
+}
+
+async function fetchAgents() {
+  try {
+    const res = await fetch(`${API}/api/agents`);
+    const agents = await res.json();
+    renderAgents(agents);
+  } catch(e) { console.error('fetch agents:', e); }
+}
+
+async function fetchStats() {
+  try {
+    const res = await fetch(`${API}/api/stats`);
+    const stats = await res.json();
+    document.getElementById('stat-total').textContent = stats.totalMessages;
+    document.getElementById('stat-agents').textContent = stats.activeAgents;
+    document.getElementById('stat-verified').textContent = stats.verifiedMessages;
+  } catch(e) { console.error('fetch stats:', e); }
+}
+
+function renderAgents(agents) {
+  const el = document.getElementById('agents-list');
+  if (!agents.length) { el.innerHTML = '<div class="empty">No agents online yet</div>'; return; }
+  el.innerHTML = agents.map(a => `
+    <div class="agent-card" onclick="filterAgent('${a.name}')">
+      <div class="agent-name">${agentIcon(a.name)} ${a.name}</div>
+      <div class="agent-role">${a.role}</div>
+      <div class="agent-did">${a.did}</div>
+      <div class="agent-stats">${a.messageCount} messages · ${a.lastSeen ? timeAgo(a.lastSeen) : 'never'}</div>
+    </div>
+  `).join('');
+}
+
+function renderFeed(msgs) {
+  const el = document.getElementById('feed');
+  if (!msgs.length) { return; }
+  el.innerHTML = msgs.map(m => `
+    <div class="msg" onclick="showChain('${m.id}')">
+      <div class="msg-header">
+        <span class="msg-agent">${agentIcon(m.agent)} ${m.agent}</span>
+        <span class="msg-time">${new Date(m.timestamp).toLocaleTimeString()}</span>
+      </div>
+      <span class="msg-type ${typeClass(m.type)}">${m.type}</span>
+      <div class="msg-payload"><pre>${JSON.stringify(m.payload, null, 2)}</pre></div>
+      <div class="msg-sig">
+        ${m.signature ? `<span class="${m.verified ? 'verified' : 'unverified'}">${m.verified ? '✅ Signature verified' : '⚠️ Signature unverified'}</span> · <code>${(m.signature || '').slice(0,32)}...</code>` : '<span class="unverified">🔓 Unsigned</span>'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function agentIcon(name) {
+  const icons = { Sentinel: '🔐', TriageAgent: '🏥', BedAvailabilityAgent: '🛏️', ReferralAgent: '📋', AdmissionsAgent: '✅' };
+  return icons[name] || '🤖';
+}
+
+function typeClass(type) {
+  if (type.includes('triage')) return 'triage';
+  if (type.includes('bed') || type.includes('capacity')) return 'beds';
+  if (type.includes('referral')) return 'referral';
+  if (type.includes('admission') || type.includes('accept')) return 'admission';
+  return '';
+}
+
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - new Date(ts)) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  return `${Math.floor(s/3600)}h ago`;
+}
+
+async function showChain(id) {
+  try {
+    const res = await fetch(`${API}/api/chain/${id}`);
+    const data = await res.json();
+    const el = document.getElementById('chain');
+    if (!data.chain.length) { el.innerHTML = '<div class="empty">No chain found</div>'; return; }
+    el.innerHTML = '<div class="chain-view">' + data.chain.map(m => `
+      <div class="chain-node">
+        <div class="cn-agent">${agentIcon(m.agent)} ${m.agent}</div>
+        <div class="cn-type">${m.type} · ${new Date(m.timestamp).toLocaleTimeString()}</div>
+      </div>
+    `).join('') + '</div>';
+  } catch(e) { console.error('chain:', e); }
+}
+
+function filterAgent(name) {
+  document.querySelectorAll('.agent-card').forEach(c => c.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  fetch(`${API}/api/messages?agent=${name}&order=desc`).then(r => r.json()).then(renderFeed);
+}
+
+// --- SSE Live Updates ---
+function connectSSE() {
+  const es = new EventSource(`${API}/api/stream`);
+  es.addEventListener('new-message', (e) => {
+    fetchMessages();
+    fetchAgents();
+    fetchStats();
+  });
+  es.onerror = () => { setTimeout(connectSSE, 3000); };
+}
+
+// --- Demo Flow ---
+async function runDemo() {
+  const post = (body) => fetch(`${API}/api/messages`, {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+
+  const caseId = 'CASE-' + Math.random().toString(36).slice(2,7).toUpperCase();
+  const fakeSig = () => Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b=>b.toString(16).padStart(2,'0')).join('');
+
+  // Step 1: Triage assessment
+  await post({
+    agent: 'TriageAgent', did: 'did:ion:EiTriage2026', type: 'triage-assessment',
+    payload: { caseId, patient: 'Jane Doe (anonymized)', priority: 'RED - Immediate', condition: 'Suspected stroke, left-side weakness, onset <2hrs', vitals: { bp: '185/110', hr: 92, spo2: 96 }, recommendation: 'Urgent neurology consult + CT angiography' },
+    signature: fakeSig()
+  });
+
+  await delay(1500);
+
+  // Step 2: Bed capacity
+  await post({
+    agent: 'BedAvailabilityAgent', did: 'did:ion:EiBeds2026', type: 'capacity-report',
+    payload: { facility: 'Hospital B - Metro General', department: 'Neurology ICU', totalBeds: 12, available: 3, caseId, timestamp: new Date().toISOString() },
+    signature: fakeSig()
+  });
+
+  await delay(1500);
+
+  // Step 3: Sentinel verifies
+  await post({
+    agent: 'Sentinel', did: 'did:ion:EiSentinel2026', type: 'provenance-verification',
+    payload: { caseId, verifiedMessages: 2, chainIntegrity: 'VALID', allSignaturesValid: true, trustScore: 0.95, note: 'All DIDs resolved via ION. Signature chain intact.' },
+    signature: fakeSig()
+  });
+
+  await delay(1500);
+
+  // Step 4: Referral
+  await post({
+    agent: 'ReferralAgent', did: 'did:ion:EiReferral2026', type: 'referral-request',
+    payload: { caseId, referralId: caseId, from: 'Hospital A - Community Health', to: 'Hospital B - Metro General', department: 'Neurology ICU', urgency: 'IMMEDIATE', reason: 'Suspected stroke requiring specialized intervention', triageVerified: true, bedConfirmed: true },
+    signature: fakeSig()
+  });
+
+  await delay(1500);
+
+  // Step 5: Admission
+  await post({
+    agent: 'AdmissionsAgent', did: 'did:ion:EiAdmissions2026', type: 'admission-decision',
+    payload: { caseId, referralId: caseId, decision: 'ACCEPTED', assignedBed: 'NICU-7', estimatedArrival: '15 minutes', provenanceChainLength: 4, allVerified: true, note: 'Full provenance chain verified. Patient accepted for immediate admission.' },
+    signature: fakeSig()
+  });
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// --- Init ---
+fetchMessages();
+fetchAgents();
+fetchStats();
+connectSSE();
+</script>
+</body>
+</html>
