@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { randomBytes } from 'crypto';
 
-const walletPath = process.argv[2] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[2] || process.env.WALLET_PATH;
 const identity = JSON.parse(readFileSync(join(walletPath, 'identity.json'), 'utf8'));
 
 const challenge = {

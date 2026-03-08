@@ -13,7 +13,7 @@ const args = process.argv.slice(2);
 let servicesArg = null;
 let network = 'mutinynet';
 let name = 'Agent';
-let walletPath = process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+let walletPath = process.env.WALLET_PATH;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--network' && args[i+1]) { network = args[++i]; }

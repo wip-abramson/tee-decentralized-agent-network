@@ -14,7 +14,7 @@ import { randomUUID } from 'crypto';
 const args = process.argv.slice(2);
 let filterType = null;
 let showAll = false;
-let walletPath = process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+let walletPath = process.env.WALLET_PATH;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--type' && args[i+1]) { filterType = args[++i]; }

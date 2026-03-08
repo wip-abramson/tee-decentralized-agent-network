@@ -9,7 +9,7 @@ import { join } from 'path';
 
 // Parse args
 const args = process.argv.slice(2);
-let walletPath = process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+let walletPath = process.env.WALLET_PATH;
 let network = 'mutinynet';
 let name = 'Agent';
 

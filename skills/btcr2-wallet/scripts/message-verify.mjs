@@ -10,7 +10,7 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 const msgArg = process.argv[2];
-const walletPath = process.argv[3] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[3] || process.env.WALLET_PATH;
 
 if (!msgArg) {
   console.error('Usage: node message-verify.mjs <signed-message-json-or-file> [wallet-path]');

@@ -10,7 +10,7 @@ import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const docArg = process.argv[2];
-const walletPath = process.argv[3] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[3] || process.env.WALLET_PATH;
 
 if (!docArg) {
   console.error('Usage: node vc-verify.mjs <vc-or-vp-json-or-file> [wallet-path]');

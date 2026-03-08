@@ -1,22 +1,28 @@
 #!/usr/bin/env node
-// Issue a Verifiable Credential from this wallet
-// Usage: node vc-issue.mjs <subject-did> <credential-type> <claims-json> [wallet-path]
-// Example: node vc-issue.mjs "did:btcr2:k1q5p..." "AgentAuthorization" '{"role":"triage","facility":"Hospital A"}'
+// Issue a Verifiable Credential by signing a template with the wallet's DID
+// Usage: node vc-issue.mjs <template-file> <subject-did> [wallet-path]
+//
+// The template is a JSON file containing the unsigned credential.
+// The script injects the issuer (wallet DID), sets the credentialSubject.id
+// to the provided subject DID, and produces a Data Integrity proof (bip340-jcs-2025).
+// The signed credential is output to stdout.
 
 import { Identifier } from '@did-btcr2/method';
 import { SchnorrKeyPair } from '@did-btcr2/keypair';
 import { BIP340DataIntegrityProof, SchnorrMultikey } from '@did-btcr2/cryptosuite';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { randomUUID } from 'crypto';
 
-const subjectDid = process.argv[2];
-const credType = process.argv[3];
-const claimsJson = process.argv[4] || '{}';
-const walletPath = process.argv[5] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const templateFile = process.argv[2];
+const subjectDid = process.argv[3];
+const walletPath = process.argv[4] || process.env.WALLET_PATH;
 
-if (!subjectDid || !credType) {
-  console.error('Usage: node vc-issue.mjs <subject-did> <credential-type> [claims-json] [wallet-path]');
+if (!templateFile || !subjectDid) {
+  console.error('Usage: node vc-issue.mjs <template-file> <subject-did> [wallet-path]');
+  console.error('');
+  console.error('  template-file  Path to a JSON credential template');
+  console.error('  subject-did    DID of the credential subject');
+  console.error('  wallet-path    Path to wallet directory (default: ./wallet)');
   process.exit(1);
 }
 
@@ -31,22 +37,16 @@ const multikey = new SchnorrMultikey({ id: '#initialKey', controller: identity.d
 const cryptosuite = multikey.toCryptosuite();
 const diProof = new BIP340DataIntegrityProof(cryptosuite);
 
-// Build VC
-const claims = JSON.parse(claimsJson);
-const vcId = `urn:uuid:${randomUUID()}`;
-const vc = {
-  '@context': ['https://www.w3.org/2018/credentials/v1', 'https://btcr2.dev/context/v1'],
-  id: vcId,
-  type: ['VerifiableCredential', credType],
-  issuer: identity.did,
-  issuanceDate: new Date().toISOString(),
-  credentialSubject: {
-    id: subjectDid,
-    ...claims
-  }
-};
+// Load template and inject issuer + subject
+const vc = JSON.parse(readFileSync(templateFile, 'utf8'));
+vc.issuer = identity.did;
+if (vc.credentialSubject) {
+  vc.credentialSubject.id = subjectDid;
+} else {
+  vc.credentialSubject = { id: subjectDid };
+}
 
-// Sign
+// Sign with Data Integrity proof
 const proofConfig = {
   type: 'DataIntegrityProof',
   cryptosuite: 'bip340-jcs-2025',
@@ -57,14 +57,14 @@ const proofConfig = {
 
 const signedVc = diProof.addProof(vc, proofConfig);
 
-// Save to history
+// Log to history
 const histDir = join(walletPath, 'history');
 mkdirSync(histDir, { recursive: true });
 writeFileSync(join(histDir, `issued-${Date.now()}.json`), JSON.stringify({
   action: 'issue',
-  vcId,
+  vcId: vc.id,
   subject: subjectDid,
-  type: credType,
+  type: vc.type,
   timestamp: new Date().toISOString()
 }, null, 2));
 

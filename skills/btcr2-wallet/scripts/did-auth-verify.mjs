@@ -11,7 +11,7 @@ import { join } from 'path';
 
 const responseArg = process.argv[2];
 const challengeArg = process.argv[3];
-const walletPath = process.argv[4] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[4] || process.env.WALLET_PATH;
 
 if (!responseArg || !challengeArg) {
   console.error('Usage: node did-auth-verify.mjs <response-json-or-file> <challenge-json-or-file> [wallet-path]');

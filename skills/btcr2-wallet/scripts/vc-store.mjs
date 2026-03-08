@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const vcArg = process.argv[2];
-const walletPath = process.argv[3] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[3] || process.env.WALLET_PATH;
 
 if (!vcArg) {
   console.error('Usage: node vc-store.mjs <vc-json-or-file> [wallet-path]');

@@ -1,8 +1,8 @@
 #!/bin/bash
 # Wrapper to run btcr2 wallet scripts with correct node_modules
 set -e
-BTCR2_DIR="${OPENCLAW_WORKSPACE:-/home/node/.openclaw/workspace}/tools/btcr2"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BTCR2_DIR="${BTCR2_DIR:-$SCRIPT_DIR/btcr2_deps}"
 SCRIPT="$1"; shift
 
 if [ ! -d "$BTCR2_DIR/node_modules/@did-btcr2" ]; then
@@ -16,5 +16,8 @@ fi
 # Symlink node_modules for ESM resolution
 [ ! -e "$SCRIPT_DIR/node_modules" ] && ln -s "$BTCR2_DIR/node_modules" "$SCRIPT_DIR/node_modules"
 [ ! -e "$SCRIPT_DIR/package.json" ] && echo '{"type":"module"}' > "$SCRIPT_DIR/package.json"
+
+# Default wallet path is relative to the skill directory (one level up from scripts/)
+export WALLET_PATH="${WALLET_PATH:-$(dirname "$SCRIPT_DIR")/wallet}"
 
 exec node "$SCRIPT_DIR/$SCRIPT" "$@"

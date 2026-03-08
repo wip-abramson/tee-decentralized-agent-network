@@ -5,7 +5,7 @@
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 
-const walletPath = process.argv[2] || process.env.WALLET_PATH || join(process.env.OPENCLAW_WORKSPACE || '/home/node/.openclaw/workspace', 'wallet');
+const walletPath = process.argv[2] || process.env.WALLET_PATH;
 
 if (!existsSync(join(walletPath, 'identity.json'))) {
   console.error('No wallet found at', walletPath);
