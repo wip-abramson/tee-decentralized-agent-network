@@ -10,5 +10,6 @@ USER.md
 memory/
 keys/
 wallet/
+tools/
 trace.json
 *.log

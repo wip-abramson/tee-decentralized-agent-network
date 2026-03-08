@@ -6,5 +6,10 @@
   "scripts": {
     "start": "node server.mjs",
     "demo": "node orchestrator.mjs"
+  },
+  "dependencies": {
+    "@did-btcr2/cryptosuite": "^5.0.0",
+    "@did-btcr2/keypair": "^0.9.0",
+    "@did-btcr2/method": "^0.20.0"
   }
 }

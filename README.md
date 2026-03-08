@@ -1,64 +1,161 @@
 # TEE Decentralized Agent Network
 
-Multi-agent trust demonstration using decentralized identifiers (DIDs) and verifiable credentials for secure agent-to-agent communication.
+Decentralized identity and verifiable credentials for AI agents. Create DIDs, authenticate peers, issue credentials, and exchange cryptographically signed messages — all without a central authority.
 
-## What It Does
+Built with [did:btcr2](https://github.com/nickreserved/did-btcr2), BIP-340 Schnorr signatures, and W3C Verifiable Credentials.
 
-Four AI agents authenticate each other, exchange verifiable credentials, and communicate with cryptographically signed messages — all without a central authority.
+## What's Here
 
-### Agents
+### 🎬 `demo/` — Multi-Agent Trust Demo
+
+A complete demonstration of 4 AI agents authenticating and communicating securely:
+
 - 🏛️ **Root Authority** (NHS Digital) — Trust root, issues credentials
 - 🏥 **Triage Agent** (Hospital A) — Emergency triage
 - 📋 **Referral Agent** (Hospital B) — Neurology intake
-- 🦹 **Rogue Agent** — Unauthorized agent (gets rejected)
+- 🦹 **Rogue Agent** — Unauthorized (gets rejected)
 
-### Protocol Flow
-1. **DID Creation** — Offline DIDs on mutinynet (did:btcr2)
-2. **Mutual DID Auth** — Challenge-response authentication
-3. **Credential Issuance** — Root issues VCs to authorized agents
-4. **Peer Authentication** — Agents verify each other
-5. **Credential Presentation** — Agents present and verify credentials
-6. **Signed Messages** — Healthcare referral with signatures
-7. **Rogue Rejection** — Unauthorized agent denied access
-8. **Replay Attack Detection** — One-time nonce enforcement
-9. **Message Tampering Detection** — Signature verification catches modifications
+**9 phases:** DID creation → mutual auth → credential issuance → peer verification → signed messages → rogue rejection → replay attack detection → tamper detection
 
-## Quick Start
+### 🔧 `skills/btcr2-vc/` — DID + Verifiable Credential Skill
 
-### Prerequisites
-- Node.js 22+
-- npm
+Create DIDs and sign/verify W3C Verifiable Credentials. Use this to give any agent a cryptographic identity.
 
-### CLI Demo
+### 🔐 `skills/btcr2-wallet/` — Full Agent Wallet Skill
+
+Complete identity wallet: DID management, DID Auth challenge-response, credential issuance/storage/presentation/verification, signed messaging.
+
+---
+
+## Quick Start: Run the Demo
+
 ```bash
 cd demo
 npm install
-node orchestrator.mjs
+node orchestrator.mjs      # CLI output
+node server.mjs             # Web visualization at http://localhost:3457
 ```
 
-### Web Visualization
+Requires Node.js 22+.
+
+---
+
+## Set Up Your Own Agent
+
+Want to give your own AI agent a decentralized identity? Here's how.
+
+### 1. Install dependencies
+
 ```bash
-cd demo
+cd skills/btcr2-wallet/scripts
 npm install
-node server.mjs
-# Open http://localhost:3457
 ```
 
-Features an animated SVG network graph with color-coded message particles flowing between agents.
+### 2. Initialize a wallet
+
+```bash
+node init.mjs --name "MyAgent" --network mutinynet
+```
+
+This creates a wallet with:
+- A new BIP-340 Schnorr keypair
+- A `did:btcr2` DID (offline, no Bitcoin transaction needed)
+- A local wallet store at `~/.btcr2-wallet/`
+
+### 3. View your agent's identity
+
+```bash
+node info.mjs
+```
+
+Shows your DID, public key, and stored credentials.
+
+### 4. Authenticate another agent (DID Auth)
+
+Challenge-response mutual authentication:
+
+```bash
+# Agent A creates a challenge
+node did-auth-challenge.mjs --target did:btcr2:k1q5p...
+
+# Agent B responds (signs the challenge)
+node did-auth-respond.mjs --challenge <challenge-json>
+
+# Agent A verifies the response
+node did-auth-verify.mjs --response <response-json>
+```
+
+### 5. Sign and verify messages
+
+```bash
+# Sign a message
+node message-sign.mjs --message '{"type":"hello","data":"world"}'
+
+# Verify a signed message
+node message-verify.mjs --signed <signed-message-json>
+```
+
+### 6. Create a DID (standalone)
+
+If you just want a DID without the full wallet:
+
+```bash
+cd skills/btcr2-vc/scripts
+npm install
+node create-did.mjs --network mutinynet
+```
+
+### 7. Issue and verify a Verifiable Credential
+
+```bash
+# Issue a VC
+node sign-vc.mjs \
+  --issuer-key <private-key-hex> \
+  --issuer-did <issuer-did> \
+  --subject-did <subject-did> \
+  --type AgentAuthorization \
+  --claims '{"role":"triage","permissions":["assess-patient"]}'
+
+# Verify a VC
+node verify-vc.mjs --vc <vc-json>
+```
+
+---
+
+## OpenClaw Integration
+
+These skills are designed for [OpenClaw](https://openclaw.ai) AI agents. To install:
+
+1. Copy `skills/btcr2-wallet/` into your OpenClaw workspace's `skills/` directory
+2. The agent can then use the wallet skill via its SKILL.md instructions
+3. The agent gets a persistent DID identity, can authenticate peers, and exchange signed messages
+
+See each skill's `SKILL.md` for detailed integration instructions.
+
+---
 
 ## Tech Stack
-- **did:btcr2** — Offline decentralized identifiers (no Bitcoin transactions needed)
-- **BIP-340 Schnorr signatures** — bip340-jcs-2025 Data Integrity proofs
-- **W3C Verifiable Credentials** — Standard credential format
-- **DID Auth** — Challenge-response mutual authentication
 
-## Project Structure
-```
-demo/               — Multi-agent demo (CLI + web)
-skills/btcr2-vc/    — DID creation + VC signing/verification
-skills/btcr2-wallet/ — Full agent wallet (DIDs, auth, VCs, messaging)
-services/dashboard/  — Dashboard UI
-```
+| Component | Technology |
+|-----------|-----------|
+| **DIDs** | `did:btcr2` — offline decentralized identifiers on Bitcoin networks |
+| **Signatures** | BIP-340 Schnorr (x-only public keys) |
+| **Proofs** | `bip340-jcs-2025` Data Integrity cryptosuite |
+| **Credentials** | W3C Verifiable Credentials v2.0 |
+| **Auth** | DID Auth challenge-response with nonce replay protection |
+| **Networks** | mutinynet (default), mainnet, testnet3, testnet4, signet, regtest |
 
-## Built at
-Challenge 1: Trustworthy Multi-Agent AI hackathon
+## How It Works
+
+1. **Identity** — Each agent creates an offline `did:btcr2` DID with a Schnorr keypair
+2. **Authentication** — Agents use challenge-response (sign a random nonce) to prove identity
+3. **Credentials** — A trust root issues W3C Verifiable Credentials to authorized agents
+4. **Verification** — Agents present and verify each other's credentials before cooperating
+5. **Messaging** — All messages are cryptographically signed with Data Integrity proofs
+6. **Security** — Unauthorized agents are rejected; replay attacks are detected via one-time nonces
+
+No central server. No certificate authority. Just math and cryptography.
+
+---
+
+Built at **Challenge 1: Trustworthy Multi-Agent AI** hackathon.

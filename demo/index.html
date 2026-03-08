@@ -183,10 +183,12 @@ function truncDid(did) { return did ? did.slice(0, 20) + '...' + did.slice(-6) :
 function startDemo() {
   runBtn.disabled = true;
   statusEl.textContent = 'Starting...';
-  fetch('/run', { method: 'POST' }).then(r => r.json()).then(d => {
-    statusEl.textContent = d.status === 'started' ? 'Running...' : d.error;
+  // Connect SSE first, then trigger the demo once connection is open
+  connectSSE(() => {
+    fetch('/run', { method: 'POST' }).then(r => r.json()).then(d => {
+      statusEl.textContent = d.status === 'started' ? 'Running...' : d.error;
+    });
   });
-  connectSSE();
 }
 
 function resetDemo() {
@@ -205,9 +207,10 @@ function resetDemo() {
   document.getElementById('summary-overlay').classList.remove('visible');
 }
 
-function connectSSE() {
+function connectSSE(onOpen) {
   if (evtSource) evtSource.close();
   evtSource = new EventSource('/events');
+  evtSource.onopen = () => { if (onOpen) onOpen(); };
   evtSource.onmessage = (e) => {
     const data = JSON.parse(e.data);
     handleEvent(data);
