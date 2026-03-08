@@ -151,6 +151,36 @@
   .json-proof { display: block; background: var(--json-proof-bg); border-left: 3px solid var(--json-proof-border); padding: 2px 0 2px 6px; margin: 1px 0; border-radius: 0 3px 3px 0; }
   .json-highlight { background: rgba(34,211,238,0.08); border-left: 3px solid rgba(34,211,238,0.3); padding: 2px 0 2px 6px; margin: 1px 0; border-radius: 0 3px 3px 0; }
 
+  /* Auto-expanded VC entries */
+  .log-entry.vc-expanded .log-payload { display: block; }
+  .log-entry.vc-expanded .log-expand-icon { transform: rotate(90deg); }
+  .vc-summary { margin: 6px 0 2px 73px; background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(167,139,250,0.03)); border: 1px solid rgba(167,139,250,0.2); border-radius: 6px; padding: 8px 12px; font-size: 11px; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; }
+  .vc-summary .vc-field { display: flex; align-items: center; gap: 4px; }
+  .vc-summary .vc-field-label { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .vc-summary .vc-field-value { color: var(--purple); font-weight: 600; }
+  .vc-summary .vc-field-value.issuer { color: var(--cyan); }
+  .vc-summary .vc-field-value.subject { color: var(--blue); }
+  .vc-summary .vc-perms { display: flex; gap: 4px; flex-wrap: wrap; }
+  .vc-summary .vc-perm { background: rgba(74,222,128,0.1); color: var(--green); padding: 1px 5px; border-radius: 3px; font-size: 9px; }
+  .vc-summary .vc-sig { color: var(--purple); font-size: 10px; opacity: 0.7; }
+
+  /* Security event banner */
+  .security-banner { margin: 8px 16px; background: linear-gradient(135deg, rgba(248,113,113,0.08), rgba(248,113,113,0.02)); border: 1px solid rgba(248,113,113,0.3); border-radius: 8px; overflow: hidden; animation: fadeIn 0.4s ease-out; }
+  .security-banner-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(248,113,113,0.06); border-bottom: 1px solid rgba(248,113,113,0.15); }
+  .security-banner-icon { font-size: 20px; }
+  .security-banner-title { font-weight: 700; font-size: 13px; color: var(--red); }
+  .security-banner-subtitle { color: var(--dim2); font-size: 11px; margin-top: 1px; }
+  .security-banner-body { padding: 10px 14px; }
+  .security-banner-reason { color: var(--text); font-size: 11px; margin-bottom: 10px; line-height: 1.5; }
+  .security-checks { display: flex; flex-direction: column; gap: 4px; }
+  .security-check { display: flex; align-items: center; gap: 8px; font-size: 11px; padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.2); }
+  .security-check .check-icon { font-size: 12px; flex-shrink: 0; }
+  .security-check .check-label { color: var(--dim2); min-width: 130px; }
+  .security-check .check-detail { color: var(--text); }
+  .security-check.pass { border-left: 3px solid var(--green); }
+  .security-check.fail { border-left: 3px solid var(--red); }
+  .security-check.denied { border-left: 3px solid var(--orange); }
+
   /* Phase divider */
   .phase-divider { padding: 10px 16px; margin: 4px 0; border-top: 1px solid var(--border); }
   .phase-divider span { color: var(--yellow); font-weight: 600; font-size: 12px; }
@@ -402,7 +432,7 @@ function renderArray(arr, indent) {
 // === MESSAGE CLASSIFICATION ===
 function classifyMsg(msgType) {
   const t = String(msgType || '');
-  if (t.includes('Rejected') || t.includes('REJECT')) return 'reject';
+  if (t.includes('Rejected') || t.includes('REJECT') || t.includes('AccessDenied')) return 'reject';
   if (t.includes('Auth') || t.includes('auth')) return 'auth';
   if (t.includes('Credential') || t.includes('credential') || t.includes('Presentation') || t.includes('presentation')) return 'vc';
   if (t.includes('Signed') || t.includes('Referral') || t.includes('Accepted')) return 'msg';
@@ -507,6 +537,11 @@ function handleEvent(ev) {
     return;
   }
 
+  if (ev.type === 'security-event') {
+    renderSecurityBanner(ev);
+    return;
+  }
+
   if (ev.type === 'summary') {
     renderSummary(ev);
     return;
@@ -526,7 +561,7 @@ function handleEvent(ev) {
         const n = graphNodes.get(ev.to);
         if (n) n.authenticated = true;
       }
-      if (String(ev.msgType).includes('Rejected')) {
+      if (String(ev.msgType).includes('Rejected') || String(ev.msgType).includes('AccessDenied')) {
         ensureEdge(ev.from, ev.to, 'rejected');
       }
       renderGraph();
@@ -620,6 +655,55 @@ function animateParticle(fromDid, toDid, type) {
   setTimeout(() => particle.remove(), 850);
 }
 
+// === VC SUMMARY ===
+function vcSummaryHtml(payload) {
+  if (!payload) return '';
+  const typeStr = String(payload.type || '');
+  const isVC = typeStr.includes('VerifiableCredential');
+  const isVP = typeStr.includes('VerifiablePresentation');
+  if (!isVC && !isVP) return '';
+
+  if (isVP) {
+    const vcs = payload.verifiableCredential || [];
+    const holder = payload.holder ? truncDid(payload.holder, 20) : '?';
+    const proofSuite = payload.proof?.cryptosuite || '?';
+    const sig = payload.proof?.proofValue ? payload.proof.proofValue.slice(0, 16) + '...' : '';
+    return `<div class="vc-summary">
+      <div class="vc-field"><span class="vc-field-label">Type</span><span class="vc-field-value">VerifiablePresentation</span></div>
+      <div class="vc-field"><span class="vc-field-label">Holder</span><span class="vc-field-value subject">${escHtml(holder)}</span></div>
+      <div class="vc-field"><span class="vc-field-label">Contains</span><span class="vc-field-value">${vcs.length} credential${vcs.length !== 1 ? 's' : ''}</span></div>
+      ${vcs.map(vc => `<div class="vc-field"><span class="vc-field-label">↳</span><span class="vc-field-value">${escHtml((vc.type||[])[1] || 'VC')}</span></div>`).join('')}
+      <div class="vc-field"><span class="vc-sig">🔏 ${escHtml(proofSuite)}${sig ? ' · ' + escHtml(sig) : ''}</span></div>
+    </div>`;
+  }
+
+  // VerifiableCredential
+  const credType = (payload.type || [])[1] || 'Unknown';
+  const issuer = payload.issuer ? truncDid(payload.issuer, 20) : '?';
+  const subject = payload.credentialSubject?.id ? truncDid(payload.credentialSubject.id, 20) : '?';
+  const proofSuite = payload.proof?.cryptosuite || '?';
+  const sig = payload.proof?.proofValue ? payload.proof.proofValue.slice(0, 16) + '...' : '';
+  const subj = payload.credentialSubject || {};
+  const perms = subj.permissions || [];
+  const role = subj.role || '';
+  const facility = subj.facility || '';
+
+  return `<div class="vc-summary">
+    <div class="vc-field"><span class="vc-field-label">Type</span><span class="vc-field-value">${escHtml(credType)}</span></div>
+    <div class="vc-field"><span class="vc-field-label">Issuer</span><span class="vc-field-value issuer">${escHtml(issuer)}</span></div>
+    <div class="vc-field"><span class="vc-field-label">Subject</span><span class="vc-field-value subject">${escHtml(subject)}</span></div>
+    ${role ? `<div class="vc-field"><span class="vc-field-label">Role</span><span class="vc-field-value">${escHtml(role)}</span></div>` : ''}
+    ${facility ? `<div class="vc-field"><span class="vc-field-label">Facility</span><span class="vc-field-value">${escHtml(facility)}</span></div>` : ''}
+    ${perms.length ? `<div class="vc-field"><span class="vc-field-label">Permissions</span><div class="vc-perms">${perms.map(p => `<span class="vc-perm">${escHtml(p)}</span>`).join('')}</div></div>` : ''}
+    <div class="vc-field"><span class="vc-sig">🔏 ${escHtml(proofSuite)}${sig ? ' · ' + escHtml(sig) : ''}</span></div>
+  </div>`;
+}
+
+function isCredentialMsg(msgType) {
+  const t = String(msgType || '');
+  return t.includes('VerifiableCredential') || t.includes('VerifiablePresentation');
+}
+
 // === RENDER LOG ===
 function renderLog(ev) {
   const div = document.createElement('div');
@@ -637,7 +721,8 @@ function renderLog(ev) {
   } else if (ev.type === 'send') {
     const toName = agentNameByDid(ev.to);
     const hasPayload = ev.payload && typeof ev.payload === 'object';
-    div.className = 'log-entry type-send';
+    const isVC = isCredentialMsg(ev.msgType);
+    div.className = `log-entry type-send${isVC ? ' vc-expanded' : ''}`;
     div.innerHTML = `
       <div class="log-header" ${hasPayload ? 'onclick="togglePayload(this)"' : ''}>
         <span class="log-time">${time}</span>
@@ -652,6 +737,7 @@ function renderLog(ev) {
         </span>
         ${hasPayload ? '<span class="log-expand-icon">▶</span>' : ''}
       </div>
+      ${isVC ? vcSummaryHtml(ev.payload) : ''}
       ${hasPayload ? `
       <div class="log-payload">
         <div class="payload-header">
@@ -788,6 +874,42 @@ function renderDetail() {
       }
       return '';
     }).join('');
+  }
+}
+
+// === SECURITY EVENT BANNER ===
+function renderSecurityBanner(ev) {
+  const statusIcons = { pass: '✅', fail: '❌', denied: '🚫' };
+  const div = document.createElement('div');
+  div.className = 'security-banner';
+  div.innerHTML = `
+    <div class="security-banner-header">
+      <span class="security-banner-icon">🛡️</span>
+      <div>
+        <div class="security-banner-title">${escHtml(ev.title)}</div>
+        <div class="security-banner-subtitle">${escHtml(ev.agent)} → ${escHtml(ev.blockedBy)}</div>
+      </div>
+    </div>
+    <div class="security-banner-body">
+      <div class="security-banner-reason">${escHtml(ev.reason)}</div>
+      <div class="security-checks">
+        ${(ev.checks || []).map(c => `
+          <div class="security-check ${c.status}">
+            <span class="check-icon">${statusIcons[c.status] || '?'}</span>
+            <span class="check-label">${escHtml(c.label)}</span>
+            <span class="check-detail">${escHtml(c.detail)}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  logArea.appendChild(div);
+  logArea.scrollTop = logArea.scrollHeight;
+
+  // Flash the rogue node in the graph
+  if (ev.agentDid) {
+    ensureEdge(ev.agentDid, ev.blockedByDid, 'rejected');
+    renderGraph();
   }
 }
 

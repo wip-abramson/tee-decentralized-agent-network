@@ -184,6 +184,38 @@ async function runDemo() {
   await delay(400);
 
   referral.think('Rogue agent has 0 valid credentials from our trust root. REJECTED.');
+  await delay(300);
+
+  referral.think('Trust chain check: Root Authority → credential → agent. Rogue has NO credential from Root Authority.');
+  referral.think('Without a valid AgentAuthorization from our trust root, this agent cannot participate in the network.');
+  referral.send(rogue.did, {
+    type: 'AccessDenied',
+    reason: 'no-valid-credentials',
+    detail: 'Agent presented 0 credentials from a trusted issuer. Authorization denied.',
+    requiredCredential: 'AgentAuthorization',
+    requiredIssuer: 'Root Authority (Trust Root)'
+  });
+  await net.run();
+  await delay(300);
+
+  const securityEvent = {
+    time: Date.now(), type: 'security-event',
+    severity: 'blocked',
+    agent: rogue.name,
+    agentDid: rogue.did,
+    blockedBy: referral.name,
+    blockedByDid: referral.did,
+    title: 'Unauthorized Agent Blocked',
+    reason: 'Rogue Agent authenticated (valid DID + signature) but holds zero credentials from the trust root. Fabricated referral request denied.',
+    checks: [
+      { label: 'DID Authentication', status: 'pass', detail: 'Valid BIP-340 signature on challenge-response' },
+      { label: 'Credential Presentation', status: 'fail', detail: '0 credentials presented (AgentAuthorization required)' },
+      { label: 'Trust Chain', status: 'fail', detail: 'No credential chain to Root Authority' },
+      { label: 'Authorization', status: 'denied', detail: 'Cannot send referrals without AgentAuthorization' }
+    ]
+  };
+  demoLogs.push(securityEvent);
+  broadcast(securityEvent);
   await delay(500);
 
   // Phase 8: Replay Attack
