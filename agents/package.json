@@ -1,0 +1,15 @@
+{
+  "name": "trustchain-agents",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Autonomous AI agents with btcr2 cryptographic identity and tool-use",
+  "scripts": {
+    "demo": "node orchestrator.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@did-btcr2/cryptosuite": "^5.0.0",
+    "@did-btcr2/keypair": "^0.9.0",
+    "@did-btcr2/method": "^0.20.0"
+  }
+}
