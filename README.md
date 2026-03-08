@@ -17,11 +17,7 @@ A complete demonstration of 4 AI agents authenticating and communicating securel
 
 **9 phases:** DID creation → mutual auth → credential issuance → peer verification → signed messages → rogue rejection → replay attack detection → tamper detection
 
-### 🔧 `skills/btcr2-vc/` — DID + Verifiable Credential Skill
-
-Create DIDs and sign/verify W3C Verifiable Credentials. Use this to give any agent a cryptographic identity.
-
-### 🔐 `skills/btcr2-wallet/` — Full Agent Wallet Skill
+### 🔐 `skills/btcr2-wallet/` — Agent Wallet Skill
 
 Complete identity wallet: DID management, DID Auth challenge-response, credential issuance/storage/presentation/verification, signed messaging.
 
@@ -93,31 +89,6 @@ node message-sign.mjs --message '{"type":"hello","data":"world"}'
 
 # Verify a signed message
 node message-verify.mjs --signed <signed-message-json>
-```
-
-### 6. Create a DID (standalone)
-
-If you just want a DID without the full wallet:
-
-```bash
-cd skills/btcr2-vc/scripts
-npm install
-node create-did.mjs --network mutinynet
-```
-
-### 7. Issue and verify a Verifiable Credential
-
-```bash
-# Issue a VC
-node sign-vc.mjs \
-  --issuer-key <private-key-hex> \
-  --issuer-did <issuer-did> \
-  --subject-did <subject-did> \
-  --type AgentAuthorization \
-  --claims '{"role":"triage","permissions":["assess-patient"]}'
-
-# Verify a VC
-node verify-vc.mjs --vc <vc-json>
 ```
 
 ---
