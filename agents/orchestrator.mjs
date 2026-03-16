@@ -32,7 +32,7 @@ const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
 
 const client = new Anthropic();
-const MODEL = process.env.MODEL || 'claude-sonnet-4-6';
+const MODEL = process.env.MODEL || 'claude-haiku-4-5-20251001';
 
 // === Agent runner — agentic loop with tool execution ===
 
